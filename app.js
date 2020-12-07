@@ -14,14 +14,14 @@ connectDB();
 // Instantiate express app
 const app = express();
 
-// Error handling middleware
-app.use(errorHandler);
-
 // Body-parser middleware
 app.use(express.json());
 
 // Mount routers
 app.use('/contacts', contactsRouter);
+
+// Error handling middleware
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

@@ -10,7 +10,7 @@ const getContacts = async (req, res, next) => {
 
     res.status(200).json({ success: true, count: contacts.length, data: contacts });
   } catch (err) {
-    res.status(400).json({ success: false });
+    next(err);
   }
 };
 
@@ -26,7 +26,7 @@ const createContact = async (req, res, next) => {
       data: contact,
     });
   } catch (err) {
-    res.status(400).json({ success: false });
+    next(err);
   }
 };
 
@@ -43,7 +43,7 @@ const updateContact = async (req, res, next) => {
 
     res.status(200).json({ success: true, data: contact });
   } catch (err) {
-    res.status(400).json({ success: false });
+    next(err);
   }
 };
 
@@ -60,7 +60,7 @@ const deleteContact = async (req, res, next) => {
 
     res.status(200).json({ success: true, data: {} });
   } catch (err) {
-    res.status(400).json({ success: false });
+    next(err);
   }
 };
 
