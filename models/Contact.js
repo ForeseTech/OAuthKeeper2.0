@@ -14,14 +14,20 @@ const ContactSchema = new mongoose.Schema({
   email: {
     type: String,
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email'],
+    trim: true,
+    unique: true,
   },
 
   phone: {
     type: String,
+    unique: true,
+    required: true,
+    match: [/^[1234567890]{10}|[1234567890](8)$/, 'Please add a valid phone number'],
   },
 
   address: {
     type: String,
+    trim: true,
   },
 
   status: {
