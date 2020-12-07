@@ -3,8 +3,14 @@ const Contact = require('../models/Contact');
 // @desc       Get all contacts
 // @route      GET /contacts
 // @access     Private
-const getContacts = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Show all contacts` });
+const getContacts = async (req, res, next) => {
+  try {
+    const contacts = await Contact.find();
+
+    res.status(200).json({ success: true, data: contacts });
+  } catch (err) {
+    res.status(400).json({ success: false });
+  }
 };
 
 // @desc       Create new contact
