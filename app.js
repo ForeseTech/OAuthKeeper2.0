@@ -12,6 +12,9 @@ connectDB();
 // Instantiate express app
 const app = express();
 
+// Body-parser middleware
+app.use(express.json());
+
 // Mount routers
 app.use('/contacts', contactsRouter);
 

@@ -1,3 +1,5 @@
+const Contact = require('../models/Contact');
+
 // @desc       Get all contacts
 // @route      GET /contacts
 // @access     Private
@@ -8,8 +10,17 @@ const getContacts = (req, res, next) => {
 // @desc       Create new contact
 // @route      POST /contacts
 // @access     Private
-const createContact = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Create new contact` });
+const createContact = async (req, res, next) => {
+  try {
+    const contact = await Contact.create(req.body);
+
+    res.status(201).json({
+      success: true,
+      data: contact,
+    });
+  } catch (err) {
+    res.status(400).json({ success: false });
+  }
 };
 
 // @desc       Update contact
