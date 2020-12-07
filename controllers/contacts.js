@@ -32,15 +32,35 @@ const createContact = async (req, res, next) => {
 // @desc       Update contact
 // @route      PUT /contacts/:id
 // @access     Private
-const updateContact = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Update contact ${req.params.id}` });
+const updateContact = async (req, res, next) => {
+  try {
+    const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+
+    if (!contact) {
+      return res.status(400).json({ success: false });
+    }
+
+    res.status(200).json({ success: true, data: contact });
+  } catch (err) {
+    res.status(400).json({ success: false });
+  }
 };
 
 // @desc       Delete contact
 // @route      DELETE /contacts/:id
 // @access     Private
-const deleteContact = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Delete contact ${req.params.id}` });
+const deleteContact = async (req, res, next) => {
+  try {
+    const contact = await Contact.findByIdAndDelete(req.params.id);
+
+    if (!contact) {
+      return res.status(400).json({ success: false });
+    }
+
+    res.status(200).json({ success: true, data: {} });
+  } catch (err) {
+    res.status(400).json({ success: false });
+  }
 };
 
 module.exports = {
