@@ -13,7 +13,11 @@ const renderRegister = asyncHandler(async (req, res, next) => {
 // @route      POST /register
 // @access     Public
 const registerUser = asyncHandler(async (req, res, next) => {
-  res.status(200).json({ success: true });
+  const user = await User.create(req.body);
+
+  res.status(201).json({
+    success: true,
+  });
 });
 
 // @desc       Render Form For User Login
