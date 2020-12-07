@@ -6,6 +6,8 @@ const errorHandler = require('./middleware/error');
 
 // Route Files
 const contactsRouter = require('./routes/contacts');
+const usersRouter = require('./routes/users');
+
 const connectDB = require('./config/db');
 
 // Connect to DB
@@ -19,6 +21,7 @@ app.use(express.json());
 
 // Mount routers
 app.use('/contacts', contactsRouter);
+app.use('/', usersRouter);
 
 // Error handling middleware
 app.use(errorHandler);
