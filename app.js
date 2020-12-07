@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv').config();
 const colors = require('colors');
 
+const errorHandler = require('./middleware/error');
+
 // Route Files
 const contactsRouter = require('./routes/contacts');
 const connectDB = require('./config/db');
@@ -11,6 +13,9 @@ connectDB();
 
 // Instantiate express app
 const app = express();
+
+// Error handling middleware
+app.use(errorHandler);
 
 // Body-parser middleware
 app.use(express.json());
