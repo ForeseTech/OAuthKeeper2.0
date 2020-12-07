@@ -33,8 +33,8 @@ const UserSchema = mongoose.Schema({
     type: String,
     enum: ['Adhihariharan', 'Anuja', 'Dhivya', 'Govind', 'Joann'],
     required: [
-      () => {
-        this.role === 'member';
+      function () {
+        return this.role === 'member';
       },
       'Please select your ED incharge',
     ],
