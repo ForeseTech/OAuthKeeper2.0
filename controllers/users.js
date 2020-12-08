@@ -66,6 +66,21 @@ const loginUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc       Log user out / Clear cookie
+// @route      GET /logout
+// @access     Private
+const logout = asyncHandler(async (req, res, next) => {
+  res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
+});
+
 // @desc       Get currently logged in user
 // @route      GET /me
 // @access     Private
@@ -102,5 +117,6 @@ module.exports = {
   registerUser,
   renderLogin,
   loginUser,
+  logout,
   getMe,
 };
