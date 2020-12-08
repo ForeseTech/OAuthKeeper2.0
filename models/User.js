@@ -27,8 +27,8 @@ const UserSchema = mongoose.Schema({
 
   role: {
     type: String,
-    enum: ['member', 'ED', 'admin'],
-    default: 'member',
+    enum: ['Member', 'Executive Director', 'Admin'],
+    default: 'Member',
   },
 
   incharge: {
@@ -36,7 +36,7 @@ const UserSchema = mongoose.Schema({
     enum: ['Adhihariharan', 'Anuja', 'Dhivya', 'Govind', 'Joann'],
     required: [
       function () {
-        return this.role === 'member';
+        return this.role === 'Member';
       },
       'Please select your ED incharge',
     ],
