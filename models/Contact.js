@@ -1,3 +1,5 @@
+// TODO : Add field for department preference
+// TODO : Add field for number of HR's
 const mongoose = require('mongoose');
 
 const ContactSchema = new mongoose.Schema({
@@ -14,6 +16,7 @@ const ContactSchema = new mongoose.Schema({
   email: {
     type: String,
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email'],
+    sparse: true,
     trim: true,
     unique: [true, 'This contact already exists in the database'],
   },
@@ -44,6 +47,12 @@ const ContactSchema = new mongoose.Schema({
       'Emailed/Confirmed',
     ],
     default: 'Not Called',
+  },
+
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
   },
 });
 
