@@ -66,6 +66,18 @@ const loginUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc       Get currently logged in user
+// @route      GET /me
+// @access     Private
+const getMe = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
   const token = user.getSignedJwtToken();
@@ -90,4 +102,5 @@ module.exports = {
   registerUser,
   renderLogin,
   loginUser,
+  getMe,
 };
