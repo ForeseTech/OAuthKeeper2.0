@@ -5,15 +5,22 @@
     <div class="card card-body mt-5">
       <h1 class="text-center mb-3">Login</h1>
 
-      <form action="/users/login" method="POST">
+      <form action="/users/login" method="POST" class="validated-form" novalidate>
         <div class="form-group">
           <label for="email">E-Mail ID</label>
-          <input type="email" name="email" id="email" class="form-control" placeholder="Enter E-Mail ID" />
+          <input type="email" name="email" id="email" class="form-control" placeholder="Enter E-Mail ID" required />
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="form-control"
+            placeholder="Enter Password"
+            required
+          />
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">LOGIN</button>

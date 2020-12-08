@@ -5,20 +5,27 @@
     <div class="card card-body mt-5">
       <h1 class="text-center mb-3">Register</h1>
 
-      <form action="/users/register" method="POST">
+      <form action="/users/register" method="POST" class="validated-form" novalidate>
         <div class="form-group">
           <label for="name">Name</label>
-          <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name" />
+          <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name" required />
         </div>
 
         <div class="form-group">
           <label for="email">E-Mail ID</label>
-          <input type="email" name="email" id="email" class="form-control" placeholder="Enter E-Mail ID" />
+          <input type="email" name="email" id="email" class="form-control" placeholder="Enter E-Mail ID" required />
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="form-control"
+            placeholder="Enter Password"
+            required
+          />
         </div>
 
         <div class="form-group">
@@ -29,13 +36,14 @@
             id="confirmPassword"
             class="form-control"
             placeholder="Confirm Password"
+            required
           />
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="role">Position</label>
-            <select name="role" id="role" class="form-control">
+            <select name="role" id="role" class="form-control" required>
               <option value="Member" selected>Member</option>
               <option value="Executive Director">Executive Director</option>
             </select>
@@ -43,8 +51,8 @@
 
           <div class="form-group col-md-6">
             <label for="incharge"></label>
-            <select name="incharge" id="incharge" class="form-control mt-2">
-              <option value="" selected disabled>Select your ED incharge</option>
+            <select name="incharge" id="incharge" class="form-control mt-2" required>
+              <option value="" selected disabled>Select ED Incharge</option>
               <option value="Adhihariharan">Adhihariharan</option>
               <option value="Anuja">Anuja</option>
               <option value="Dhivya">Dhivya</option>
@@ -53,8 +61,6 @@
             </select>
           </div>
         </div>
-
-        <!-- TODO : Have option for selecting ED if position is Member -->
 
         <button type="submit" class="btn btn-primary btn-block">REGISTER</button>
       </form>
@@ -70,6 +76,7 @@
   role.addEventListener('change', function () {
     if (this.value === 'Executive Director') {
       edIncharge.classList.add('d-none');
+      edIncharge.required = false;
     } else {
       edIncharge.classList.remove('d-none');
     }
