@@ -6,10 +6,10 @@ const asyncHandler = require('../middleware/async');
 // @route      GET /register
 // @access     Public
 const renderRegister = asyncHandler(async (req, res, next) => {
-  res.status(200).json({ success: true });
+  res.status(200).render('users/register');
 });
 
-// @desc       Register A User
+// @desc       Register User, Then Redirect To Dashboard
 // @route      POST /register
 // @access     Public
 const registerUser = asyncHandler(async (req, res, next) => {
@@ -23,17 +23,17 @@ const registerUser = asyncHandler(async (req, res, next) => {
 // @route      GET /login
 // @access     Public
 const renderLogin = asyncHandler(async (req, res, next) => {
-  res.status(200).json({ success: true });
+  res.status(200).render('users/login');
 });
 
-// @desc       Login A User
+// @desc       Log User In, Then Redirect To Dashboard
 // @route      POST /login
 // @access     Public
 const loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   // Validate input email and password
-  // We need to validate as login info is not validated against the model
+  // We need to validate as login info is not validated against the Model
   if (!email || !password) {
     return next(new ErrorResponse('Please provide an email and password', 400));
   }
@@ -56,7 +56,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
-// @desc       Log user out / Clear cookie
+// @desc       Log User Out / Clear Cookie
 // @route      GET /logout
 // @access     Private
 const logout = asyncHandler(async (req, res, next) => {
@@ -96,10 +96,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     options.secure = true;
   }
 
-  res.status(statusCode).cookie('token', token, options).json({
-    success: true,
-    token,
-  });
+  res.status(statusCode).cookie('token', token, options).redirect('/contacts');
 };
 
 module.exports = {
