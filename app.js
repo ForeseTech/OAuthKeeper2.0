@@ -1,7 +1,9 @@
+const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const colors = require('colors');
+const ejsMate = require('ejs-mate');
 
 const errorHandler = require('./middleware/error');
 
@@ -17,15 +19,28 @@ connectDB();
 // Instantiate express app
 const app = express();
 
+// Views and View Engine
+app.engine('ejs', ejsMate);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 // Body-parser middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Serve static assets
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Cookie parser middleware
 app.use(cookieParser());
 
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
 // Mount routers
 app.use('/contacts', contactsRouter);
-app.use('/', usersRouter);
+app.use('/users', usersRouter);
 
 // Error handling middleware
 app.use(errorHandler);
