@@ -23,28 +23,42 @@ const createContact = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc       Update contact
+// @desc       Update a contact, then redirect
 // @route      PUT /contacts/:id
 // @access     Private
 const updateContact = asyncHandler(async (req, res, next) => {
-  const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+  let contact = await Contact.findById(req.params.id);
 
   if (!contact) {
     return next(new ErrorResponse(`Contact with the ID of ${req.params.id} does not exist.`, 404));
   }
+
+  // Update contact only if contact belongs to the logged in user or if user is admin
+  if (contact.user.toString() !== req.user.id) {
+    return next(new ErrorResponse(`User ${req.user.name} is not authorized to access this contact`, 401));
+  }
+
+  contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
 
   res.status(200).json({ success: true, data: contact });
 });
 
-// @desc       Delete contact
+// @desc       Delete a contact, then redirect
 // @route      DELETE /contacts/:id
 // @access     Private
 const deleteContact = asyncHandler(async (req, res, next) => {
-  const contact = await Contact.findByIdAndDelete(req.params.id);
+  const contact = await Contact.findById(req.params.id);
 
   if (!contact) {
     return next(new ErrorResponse(`Contact with the ID of ${req.params.id} does not exist.`, 404));
   }
+
+  // Delete contact only if contact belongs to the logged in user or if user is admin
+  if (contact.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`User ${req.user.id} is not authorized to access this contact`, 401));
+  }
+
+  contact.remove();
 
   res.status(200).json({ success: true, data: {} });
 });
