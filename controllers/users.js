@@ -15,8 +15,12 @@ const renderRegister = asyncHandler(async (req, res, next) => {
 const registerUser = asyncHandler(async (req, res, next) => {
   const user = await User.create(req.body);
 
-  res.status(201).json({
+  // Create Token
+  const token = user.getSignedJwtToken();
+
+  res.status(200).json({
     success: true,
+    token,
   });
 });
 
@@ -31,7 +35,35 @@ const renderLogin = asyncHandler(async (req, res, next) => {
 // @route      POST /login
 // @access     Public
 const loginUser = asyncHandler(async (req, res, next) => {
-  res.status(200).json({ success: true });
+  const { email, password } = req.body;
+
+  // Validate input email and password
+  // We need to validate as login info is not validated against the model
+  if (!email || !password) {
+    return next(new ErrorResponse('Please provide an email and password', 400));
+  }
+
+  const user = await User.findOne({ email: email }).select('+password');
+
+  // Check if user exists
+  if (!user) {
+    return next(new ErrorResponse('Invalid credentials', 401));
+  }
+
+  // Check if password matches
+  const isMatch = await user.matchPassword(password);
+
+  if (!isMatch) {
+    return next(new ErrorResponse('Invalid credentials', 401));
+  }
+
+  // Create a token
+  const token = user.getSignedJwtToken();
+
+  res.status(200).json({
+    success: true,
+    token,
+  });
 });
 
 module.exports = {
