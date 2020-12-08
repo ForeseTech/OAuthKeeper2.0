@@ -1,20 +1,50 @@
+// TODO : Check out YelpCamp's way of accepting form data using arrays
 const Contact = require('../models/Contact');
+const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 
-// @desc       Get all contacts
+// @desc       Display contacts according to the role of the user
 // @route      GET /contacts
 // @access     Private
 const getContacts = asyncHandler(async (req, res, next) => {
-  const contacts = await Contact.find();
+  let contacts;
+
+  // If user is member, show only their contacts
+  if (req.user.role === 'Member') {
+    contacts = await Contact.find({ user: req.user.id });
+  }
+
+  // Show contacts of all team members if user is an ED
+  else if (req.user.role === 'Executive Director') {
+    // Get the ID's of the members whose ED incharge is the logged in user
+    const members = await User.find({ incharge: req.user.name }, '_id');
+
+    // Get contacts of the team members whose ED incharge is the logged in user
+    contacts = await Contact.find().where('user').in(members).populate({
+      path: 'user',
+      select: 'name',
+    });
+  }
+
+  // Show all contacts if user is an Admin
+  else if (req.user.role == 'Admin') {
+    contacts = await Contact.find().populate({
+      path: 'user',
+      select: 'name role',
+    });
+  }
 
   res.status(200).json({ success: true, count: contacts.length, data: contacts });
 });
 
-// @desc       Create new contact
+// @desc       Create new contact, then redirect
 // @route      POST /contacts
 // @access     Private
 const createContact = asyncHandler(async (req, res, next) => {
+  // Add user ID to request body
+  req.body.user = req.user.id;
+
   const contact = await Contact.create(req.body);
 
   res.status(201).json({
