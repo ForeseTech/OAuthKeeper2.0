@@ -17,11 +17,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
   // Send token response
   sendTokenResponse(user, 200, res);
-
-  res.status(200).json({
-    success: true,
-    token,
-  });
 });
 
 // @desc       Render Form For User Login
@@ -59,11 +54,6 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
   // Send token response
   sendTokenResponse(user, 200, res);
-
-  res.status(200).json({
-    success: true,
-    token,
-  });
 });
 
 // @desc       Log user out / Clear cookie
