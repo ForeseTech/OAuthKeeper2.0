@@ -6,13 +6,17 @@
 
     <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css" />
 
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title>OAuthKeeper</title>
   </head>
   <body>
-    <%- body %>
+    <main class="container">
+      <%- include("../partials/flash.ejs") %>
+      <div class="row mt-5"><%- body %></div>
+    </main>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="/js/validateForms.js"></script>
+    <script src="/js/formModal.js"></script>
   </body>
 </html>
