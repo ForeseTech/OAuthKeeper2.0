@@ -1,6 +1,8 @@
+const fs = require('fs');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
+const { format } = require('date-fns');
 
 // @desc       Render Form For User Registration
 // @route      GET /register
@@ -51,6 +53,12 @@ const loginUser = asyncHandler(async (req, res, next) => {
   if (!isMatch) {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
+
+  const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
+  let data = `${formatDate} ${user.name} logged in.\n`;
+  fs.appendFile('utils/logs/OAuthKeeperLogs.txt', data, (err) => {
+    if (err) throw err;
+  });
 
   // Send token response
   sendTokenResponse(user, 200, req, res);
