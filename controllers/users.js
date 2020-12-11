@@ -16,7 +16,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
   const user = await User.create(req.body);
 
   // Send token response
-  sendTokenResponse(user, 200, res);
+  sendTokenResponse(user, 200, req, res);
 });
 
 // @desc       Render Form For User Login
@@ -53,7 +53,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
   }
 
   // Send token response
-  sendTokenResponse(user, 200, res);
+  sendTokenResponse(user, 200, req, res);
 });
 
 // @desc       Log User Out / Clear Cookie
@@ -65,10 +65,8 @@ const logout = asyncHandler(async (req, res, next) => {
     httpOnly: true,
   });
 
-  res.status(200).json({
-    success: true,
-    data: {},
-  });
+  req.flash('success', 'You have logged out');
+  res.redirect('/users/login');
 });
 
 // @desc       Get currently logged in user
@@ -84,7 +82,7 @@ const getMe = asyncHandler(async (req, res, next) => {
 });
 
 // Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
+const sendTokenResponse = (user, statusCode, req, res) => {
   const token = user.getSignedJwtToken();
 
   const options = {
@@ -96,7 +94,8 @@ const sendTokenResponse = (user, statusCode, res) => {
     options.secure = true;
   }
 
-  res.status(statusCode).cookie('token', token, options).redirect('/contacts');
+  req.flash('success', `Welcome, ${user.name}.`);
+  res.cookie('token', token, options).redirect('/contacts');
 };
 
 module.exports = {
