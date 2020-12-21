@@ -2,14 +2,15 @@ const fs = require('fs');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
+const sendEmail = require('../utils/sendEmail');
 const { format } = require('date-fns');
 
 // @desc       Render Form For User Registration
 // @route      GET /register
 // @access     Public
-const renderRegister = asyncHandler(async (req, res, next) => {
+const renderRegister = (req, res, next) => {
   res.status(200).render('users/register');
-});
+};
 
 // @desc       Register User, Then Redirect To Dashboard
 // @route      POST /register
@@ -24,9 +25,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
 // @desc       Render Form For User Login
 // @route      GET /login
 // @access     Public
-const renderLogin = asyncHandler(async (req, res, next) => {
+const renderLogin = (req, res, next) => {
   res.status(200).render('users/login');
-});
+};
 
 // @desc       Log User In, Then Redirect To Dashboard
 // @route      POST /login
@@ -44,14 +45,16 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
   // Check if user exists
   if (!user) {
-    return next(new ErrorResponse('Invalid credentials', 401));
+    req.flash('error', 'Invalid Login Credentials');
+    return res.redirect('/users/login');
   }
 
   // Check if password matches
   const isMatch = await user.matchPassword(password);
 
   if (!isMatch) {
-    return next(new ErrorResponse('Invalid credentials', 401));
+    req.flash('error', 'Invalid Login Credentials');
+    return res.redirect('/users/login');
   }
 
   const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
