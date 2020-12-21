@@ -1,9 +1,12 @@
 <% layout("layouts/boilerplate") -%>
 
+<div class="col-md-10 m-auto"><%- include("../partials/flash.ejs") %></div>
+
 <div class="col-md-10 m-auto">
   <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#newContact">New Contact</button>
-
   <a href="/users/logout" class="float-right btn btn-secondary">Logout</a>
+
+  <input type="text" name="search" id="search" class="form-control float-right col-sm-3" placeholder="Search" />
 
   <% if(!contacts.length) { %>
   <p>You have not added any contacts yet.</p>
@@ -12,15 +15,17 @@
     <% contacts.forEach((contact, index) => { %>
     <div class="card">
       <div class="card-header" id="headingOne">
-        <p><%= contact.name %> (<%= contact.company %>)</p>
-        <i
-          class="fa fa-chevron-down"
-          data-toggle="collapse"
-          data-target="#collapse<%= contact._id %>"
-          aria-hidden="true"
-          aria-controls="collapse<%= contact._id %>"
-          aria-expanded="true"
-        ></i>
+        <p class="contact-header">
+          <%= contact.name %> (<%= contact.company %>)
+          <i
+            class="fa fa-chevron-down"
+            data-toggle="collapse"
+            data-target="#collapse<%= contact._id %>"
+            aria-hidden="true"
+            aria-controls="collapse<%= contact._id %>"
+            aria-expanded="true"
+          ></i>
+        </p>
       </div>
 
       <div id="collapse<%= contact._id %>" class="collapse show" aria-labelledby="headingOne">

@@ -4,6 +4,8 @@
   <div class="card card-body">
     <h1 class="text-center m-0">Register</h1>
 
+    <%- include("../partials/flash.ejs") %>
+
     <form action="/users/register" method="POST" class="validated-form" novalidate>
       <div class="form-group">
         <label for="name">Name</label>
