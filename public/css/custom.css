@@ -3,5 +3,21 @@
 }
 
 .card {
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-header {
+  padding: 0.15rem;
+}
+
+.contact-header {
+  padding-left: 1rem;
+  padding-top: 0.35rem;
+}
+
+i {
+  position: absolute;
+  padding-top: 0.5rem;
+  padding-right: 1rem;
+  right: 0;
 }
