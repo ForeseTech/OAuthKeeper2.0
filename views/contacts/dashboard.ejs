@@ -1,6 +1,15 @@
 <% layout("layouts/boilerplate") -%>
 
-<div class="col-md-10 m-auto"><%- include("../partials/flash.ejs") %></div>
+<div class="col-md-10 m-auto">
+  <%- include("../partials/flash.ejs") %>
+  <h1 class="text-center">DASHBOARD</h1>
+</div>
+
+<div class="col-md-9 m-auto stats">
+  <% statuses.forEach((status) => { %>
+  <div class="stat"><%= status._id %> - <%= status.count %></div>
+  <% }) %>
+</div>
 
 <div class="col-md-10 m-auto">
   <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#newContact">New Contact</button>

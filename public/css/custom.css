@@ -21,3 +21,22 @@ i {
   padding-right: 1rem;
   right: 0;
 }
+
+.stats {
+  display: grid;
+  padding: 5px;
+  grid-gap: 1px;
+  border-radius: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: black;
+}
+
+.stat {
+  background-color: white;
+  padding: 1rem;
+  border: 4px solid black;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

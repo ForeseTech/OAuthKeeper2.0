@@ -10,11 +10,20 @@ const { format } = require('date-fns');
 // @route      GET /contacts
 // @access     Private
 const getContacts = asyncHandler(async (req, res, next) => {
-  let contacts;
+  let contacts, statuses;
 
   // If user is member, show only their contacts
   if (req.user.role === 'Member') {
     contacts = await Contact.find({ user: req.user.id });
+    statuses = await Contact.aggregate([
+      { $match: { user: req.user._id } },
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
   }
 
   // Show contacts of all team members if user is an ED
@@ -27,6 +36,17 @@ const getContacts = asyncHandler(async (req, res, next) => {
       path: 'user',
       select: 'name',
     });
+
+    memberIds = members.map((member) => member._id);
+    statuses = await Contact.aggregate([
+      { $match: { user: { $in: memberIds } } },
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
   }
 
   // Show all contacts if user is an Admin
@@ -35,10 +55,20 @@ const getContacts = asyncHandler(async (req, res, next) => {
       path: 'user',
       select: 'name role',
     });
+
+    statuses = await Contact.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
   }
 
   res.status(200).render('contacts/dashboard.ejs', {
     contacts,
+    statuses,
   });
 });
 
