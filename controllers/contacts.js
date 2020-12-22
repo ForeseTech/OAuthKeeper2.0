@@ -10,11 +10,45 @@ const { format } = require('date-fns');
 // @route      GET /contacts
 // @access     Private
 const getContacts = asyncHandler(async (req, res, next) => {
-  let contacts, statuses;
+  let contacts;
 
   // If user is member, show only their contacts
   if (req.user.role === 'Member') {
     contacts = await Contact.find({ user: req.user.id });
+  }
+
+  // Show contacts of all team members if user is an ED
+  else if (req.user.role === 'Executive Director') {
+    // Get the ID's of the members whose ED incharge is the logged in user
+    const members = await User.find({ incharge: req.user.name }, '_id');
+
+    // Get contacts of the team members whose ED incharge is the logged in user
+    contacts = await Contact.find().where('user').in(members).populate({
+      path: 'user',
+      select: 'name',
+    });
+  }
+
+  // Show all contacts if user is an Admin
+  else if (req.user.role == 'Admin') {
+    contacts = await Contact.find().populate({
+      path: 'user',
+      select: 'name role',
+    });
+  }
+
+  res.status(200).render('contacts/dashboard.ejs', {
+    contacts,
+  });
+});
+
+// @desc       Display stats for each user
+// @route      GET /contacts/statistics
+// @access     Private
+const getStatistics = asyncHandler(async (req, res, next) => {
+  let statuses;
+  // If user is member, show only their contacts
+  if (req.user.role === 'Member') {
     statuses = await Contact.aggregate([
       { $match: { user: req.user._id } },
       {
@@ -31,12 +65,6 @@ const getContacts = asyncHandler(async (req, res, next) => {
     // Get the ID's of the members whose ED incharge is the logged in user
     const members = await User.find({ incharge: req.user.name }, '_id');
 
-    // Get contacts of the team members whose ED incharge is the logged in user
-    contacts = await Contact.find().where('user').in(members).populate({
-      path: 'user',
-      select: 'name',
-    });
-
     memberIds = members.map((member) => member._id);
     statuses = await Contact.aggregate([
       { $match: { user: { $in: memberIds } } },
@@ -51,11 +79,6 @@ const getContacts = asyncHandler(async (req, res, next) => {
 
   // Show all contacts if user is an Admin
   else if (req.user.role == 'Admin') {
-    contacts = await Contact.find().populate({
-      path: 'user',
-      select: 'name role',
-    });
-
     statuses = await Contact.aggregate([
       {
         $group: {
@@ -66,8 +89,7 @@ const getContacts = asyncHandler(async (req, res, next) => {
     ]);
   }
 
-  res.status(200).render('contacts/dashboard.ejs', {
-    contacts,
+  res.status(200).render('contacts/statistics.ejs', {
     statuses,
   });
 });
@@ -141,6 +163,7 @@ const deleteContact = asyncHandler(async (req, res, next) => {
 
 module.exports = {
   getContacts,
+  getStatistics,
   createContact,
   updateContact,
   deleteContact,
