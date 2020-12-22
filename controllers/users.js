@@ -38,7 +38,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
   const user = await User.create(req.body);
 
   // Send token response
-  sendTokenResponse(user, 200, req, res);
+  sendTokenResponse(user, 200, req, res, `Welcome ${user.name}`);
 });
 
 // @desc       Render Form For User Login
@@ -83,7 +83,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
   });
 
   // Send token response
-  sendTokenResponse(user, 200, req, res);
+  sendTokenResponse(user, 200, req, res, `Welcome ${user.name}`);
 });
 
 const renderForgotPasswordForm = (req, res, next) => {
@@ -124,8 +124,27 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
     await user.save({ validateBeforeSave: false });
 
     req.flash('error', 'Email could not be sent. Please contact administrator.');
-    return res.redirect('/users/forgotpassword');
+    return res.redirect('/users/forgotPassword');
   }
+});
+
+const renderUpdatePasswordForm = (req, res, next) => {
+  res.status(200).render('users/updatePassword');
+};
+
+const updatePassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password');
+
+  // Check current password
+  if (!(await user.matchPassword(req.body.currentPassword))) {
+    req.flash('error', 'Incorrect password entered.');
+    return res.redirect('/users/updatePassword');
+  }
+
+  user.password = req.body.newPassword;
+  await user.save();
+
+  sendTokenResponse(user, 200, req, res, 'Updated Password Successfully');
 });
 
 // @desc       Log User Out / Clear Cookie
@@ -154,7 +173,7 @@ const getMe = asyncHandler(async (req, res, next) => {
 });
 
 // Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, req, res) => {
+const sendTokenResponse = (user, statusCode, req, res, flashMsg) => {
   const token = user.getSignedJwtToken();
 
   const options = {
@@ -166,7 +185,7 @@ const sendTokenResponse = (user, statusCode, req, res) => {
     options.secure = true;
   }
 
-  req.flash('success', `Welcome, ${user.name}.`);
+  req.flash('success', flashMsg);
   res.cookie('token', token, options).redirect('/contacts');
 };
 
@@ -177,6 +196,8 @@ module.exports = {
   loginUser,
   renderForgotPasswordForm,
   forgotPassword,
+  renderUpdatePasswordForm,
+  updatePassword,
   logout,
   getMe,
 };

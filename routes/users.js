@@ -6,6 +6,8 @@ const {
   loginUser,
   renderForgotPasswordForm,
   forgotPassword,
+  renderUpdatePasswordForm,
+  updatePassword,
   logout,
   getMe,
 } = require('../controllers/users');
@@ -19,6 +21,8 @@ router.route('/register').get(renderRegister).post(registerUser);
 router.route('/login').get(renderLogin).post(loginUser);
 
 router.route('/forgotpassword').get(renderForgotPasswordForm).post(forgotPassword);
+
+router.route('/updatepassword').get(protect, renderUpdatePasswordForm).post(protect, updatePassword);
 
 router.route('/me').get(protect, getMe);
 
