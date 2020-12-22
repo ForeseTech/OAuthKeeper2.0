@@ -6,6 +6,7 @@ const ContactSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
+    required: [true, 'Please add a name'],
   },
 
   company: {
@@ -16,9 +17,7 @@ const ContactSchema = new mongoose.Schema({
   email: {
     type: String,
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email'],
-    sparse: true,
     trim: true,
-    unique: [true, 'This contact already exists in the database'],
   },
 
   phone: {
