@@ -86,6 +86,48 @@ const loginUser = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, req, res);
 });
 
+const renderForgotPasswordForm = (req, res, next) => {
+  res.status(200).render('users/forgotPassword');
+};
+
+const forgotPassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    req.flash('error', 'There is no user with that email');
+    return res.redirect('/users/forgotpassword');
+  }
+
+  // Get reset token
+  const resetToken = user.getResetPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  // Reset URL
+  const resetURL = `${req.protocol}://${req.get('host')}/users/resetpassword/${resetToken}`;
+
+  const message = `You are receiving this message because you (or someone else) has requested the reset of a forgotPassword. Please click on the following link to reset your password\n\n ${resetURL}`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'OAuthKeeper - Password Reset Link',
+      message,
+    });
+
+    req.flash('success', 'A password reset link has been sent to your E-Mail ID.');
+    res.redirect('/users/forgotpassword');
+  } catch (err) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    req.flash('error', 'Email could not be sent. Please contact administrator.');
+    return res.redirect('/users/forgotpassword');
+  }
+});
+
 // @desc       Log User Out / Clear Cookie
 // @route      GET /logout
 // @access     Private
@@ -133,6 +175,8 @@ module.exports = {
   registerUser,
   renderLogin,
   loginUser,
+  renderForgotPasswordForm,
+  forgotPassword,
   logout,
   getMe,
 };
