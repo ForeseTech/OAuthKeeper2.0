@@ -13,7 +13,8 @@ const protect = asyncHandler(async (req, res, next) => {
 
   // Make sure token exists
   if (!token) {
-    return next(new ErrorResponse('Not authorized to access this route', 401));
+    req.flash('error', 'Please log in to view the page');
+    return res.redirect('/users/login');
   }
 
   // Verify Token
@@ -24,7 +25,8 @@ const protect = asyncHandler(async (req, res, next) => {
 
     next();
   } catch (err) {
-    return next(new ErrorResponse('Not authorized to access this route', 401));
+    req.flash('error', 'Please log in to view the page');
+    return res.redirect('/users/login');
   }
 });
 
@@ -32,7 +34,8 @@ const protect = asyncHandler(async (req, res, next) => {
 const authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(new ErrorResponse(`User role ${req.user.role} is not authorized to access this route`, 403));
+      req.flash('error', `User role ${req.user.role} is not authorized to access this route`);
+      return res.redirect('/users/login');
     }
     next();
   };
