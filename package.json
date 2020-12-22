@@ -10,6 +10,9 @@
   "keywords": [],
   "author": "Nilesh D",
   "license": "MIT",
+  "engines": {
+    "node": "10.x"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
