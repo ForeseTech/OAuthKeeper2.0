@@ -16,6 +16,25 @@ const renderRegister = (req, res, next) => {
 // @route      POST /register
 // @access     Public
 const registerUser = asyncHandler(async (req, res, next) => {
+  const { email, password, password2 } = req.body;
+
+  User.findOne({ email: email }).then((user) => {
+    if (user) {
+      req.flash('error', 'A user with the E-Mail ID already exists.');
+      return res.redirect('/users/register');
+    }
+  });
+
+  if (password.length < 6) {
+    req.flash('error', 'Password length must be atleast 6 characters.');
+    return res.redirect('/users/register');
+  }
+
+  if (password !== password2) {
+    req.flash('error', 'Passwords do not match.');
+    return res.redirect('/users/register');
+  }
+
   const user = await User.create(req.body);
 
   // Send token response
@@ -45,7 +64,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
   // Check if user exists
   if (!user) {
-    req.flash('error', 'Invalid Login Credentials');
+    req.flash('error', 'No such user exists. Please register first.');
     return res.redirect('/users/login');
   }
 
@@ -53,7 +72,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
   const isMatch = await user.matchPassword(password);
 
   if (!isMatch) {
-    req.flash('error', 'Invalid Login Credentials');
+    req.flash('error', 'Invalid Login Credentials.');
     return res.redirect('/users/login');
   }
 
