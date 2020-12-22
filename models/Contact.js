@@ -48,6 +48,15 @@ const ContactSchema = new mongoose.Schema({
     default: 'Not Called',
   },
 
+  mode: {
+    type: String,
+    enum: ['Offline', 'Online'],
+  },
+
+  count: {
+    type: Number,
+  },
+
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',

@@ -40,6 +40,8 @@
             <p><b>Address : </b> <%= contact.address %></p>
             <% } %>
             <p><b>Status : </b> <%= contact.status %></p>
+            <p><b>Interview Mode : </b> <%= contact.mode %></p>
+            <p><b>HR Count : </b> <%= contact.count %></p>
 
             <div class="text-right">
               <button
@@ -53,6 +55,8 @@
                 data-phone="<%= contact.phone %>"
                 data-email="<%= contact.email %>"
                 data-status="<%= contact.status %>"
+                data-mode="<%= contact.mode %>"
+                data-count="<%= contact.count %> "
                 data-address="<%= contact.address %>"
               >
                 Edit
@@ -82,60 +86,7 @@
 
           <div class="modal-body">
             <form action="/contacts" method="POST" class="validated-form" novalidate>
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name" required />
-              </div>
-
-              <div class="form-group">
-                <label for="company">Company</label>
-                <input type="text" name="company" id="company" class="form-control" placeholder="Enter Company Name" />
-              </div>
-
-              <div class="form-group">
-                <label for="email">E-Mail ID</label>
-                <input type="email" name="email" id="email" class="form-control" placeholder="Enter E-Mail ID" />
-              </div>
-
-              <div class="form-group">
-                <label for="phone">Phone No.</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  id="phone"
-                  class="form-control"
-                  placeholder="Enter Phone Number"
-                  required
-                />
-              </div>
-
-              <div class="form-group">
-                <label for="status">Status</label>
-                <select name="status" id="status" class="form-control">
-                  <option value="Not Called">Not Called</option>
-                  <option value="Wrong Number">Wrong Number</option>
-                  <option value="Called/Declined">Called/Declined</option>
-                  <option value="Called/Not Reachable">Called/Not Reachable</option>
-                  <option value="Called/Postponed">Called/Postponed</option>
-                  <option value="Called/Accepted">Called/Accepted</option>
-                  <option value="Emailed/Awaiting Response">Emailed/Awaiting Response</option>
-                  <option value="Emailed/Declined">Emailed/Declined</option>
-                  <option value="Emailed/Confirmed">Emailed/Confirmed</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="address">Address</label>
-                <textarea
-                  name="address"
-                  id="address"
-                  cols="30"
-                  rows="2"
-                  class="form-control"
-                  placeholder="Enter Address"
-                ></textarea>
-              </div>
-
+              <%- include("../partials/form_fields.ejs"); %>
               <div class="modal-footer">
                 <button type="submit" class="btn btn-success">Save Contact</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
@@ -160,66 +111,7 @@
           <div class="modal-body">
             <form method="POST" id="edit-contact-form">
               <input type="hidden" name="_method" value="PUT" />
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" name="name" id="edit-name" class="form-control" placeholder="Enter Name" />
-              </div>
-
-              <div class="form-group">
-                <label for="company">Company</label>
-                <input
-                  type="text"
-                  name="company"
-                  id="edit-company"
-                  class="form-control"
-                  placeholder="Enter Company Name"
-                />
-              </div>
-
-              <div class="form-group">
-                <label for="email">E-Mail ID</label>
-                <input type="email" name="email" id="edit-email" class="form-control" placeholder="Enter E-Mail ID" />
-              </div>
-
-              <div class="form-group">
-                <label for="phone">Phone No.</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  id="edit-phone"
-                  class="form-control"
-                  placeholder="Enter Phone Number"
-                  required
-                />
-              </div>
-
-              <div class="form-group">
-                <label for="status">Status</label>
-                <select name="status" id="edit-status" class="form-control">
-                  <option value="Not Called">Not Called</option>
-                  <option value="Wrong Number">Wrong Number</option>
-                  <option value="Called/Declined">Called/Declined</option>
-                  <option value="Called/Not Reachable">Called/Not Reachable</option>
-                  <option value="Called/Postponed">Called/Postponed</option>
-                  <option value="Called/Accepted">Called/Accepted</option>
-                  <option value="Emailed/Awaiting Response">Emailed/Awaiting Response</option>
-                  <option value="Emailed/Declined">Emailed/Declined</option>
-                  <option value="Emailed/Confirmed">Emailed/Confirmed</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="edit-address">Address</label>
-                <textarea
-                  name="address"
-                  id="edit-address"
-                  cols="30"
-                  rows="2"
-                  class="form-control"
-                  placeholder="Enter Address"
-                ></textarea>
-              </div>
-
+              <%- include("../partials/form_fields.ejs"); %>
               <div class="modal-footer">
                 <button type="submit" class="btn btn-warning">Update Contact</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
