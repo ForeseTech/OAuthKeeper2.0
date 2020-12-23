@@ -33,7 +33,7 @@ const getContacts = asyncHandler(async (req, res, next) => {
   else if (req.user.role == 'Admin') {
     contacts = await Contact.find().populate({
       path: 'user',
-      select: 'name role',
+      select: 'name incharge',
     });
   }
 

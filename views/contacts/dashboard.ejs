@@ -21,6 +21,17 @@
         <div class="card-header" id="headingOne">
           <p class="contact-header">
             <%= contact.name %> (<%= contact.company %>)
+            <span class="status"> <%= contact.status %> </span>
+            <span class="member">
+              <!-- prettier-ignore -->
+              <% if(contact.user.name) { %>
+               <%= contact.user.name %> 
+              <% } %> 
+              <% if(contact.user.incharge) { %>
+                / <%= contact.user.incharge %>
+              <% } %>
+              <!-- prettier-ignore -->
+            </span>
             <i
               class="fa fa-chevron-down"
               data-toggle="collapse"
@@ -39,7 +50,6 @@
             <% } %> <% if(contact.address) { %>
             <p><b>Address : </b> <%= contact.address %></p>
             <% } %>
-            <p><b>Status : </b> <%= contact.status %></p>
             <p><b>Interview Mode : </b> <%= contact.mode %></p>
             <p><b>HR Count : </b> <%= contact.count %></p>
 
