@@ -8,6 +8,8 @@ const {
   forgotPassword,
   renderUpdatePasswordForm,
   updatePassword,
+  renderResetPasswordForm,
+  resetPassword,
   logout,
   getMe,
 } = require('../controllers/users');
@@ -22,7 +24,9 @@ router.route('/login').get(renderLogin).post(loginUser);
 
 router.route('/forgotpassword').get(renderForgotPasswordForm).post(forgotPassword);
 
-router.route('/updatepassword').get(protect, renderUpdatePasswordForm).post(protect, updatePassword);
+router.route('/updatepassword').get(protect, renderUpdatePasswordForm).put(protect, updatePassword);
+
+router.route('/resetpassword/:resettoken').get(renderResetPasswordForm).put(resetPassword);
 
 router.route('/me').get(protect, getMe);
 

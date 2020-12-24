@@ -1,4 +1,5 @@
 const fs = require('fs');
+const crypto = require('crypto');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
@@ -142,7 +143,7 @@ const renderUpdatePasswordForm = (req, res, next) => {
 };
 
 // @desc       Update Password in DB
-// @route      POST /users/updatepassword
+// @route      PUT /users/updatepassword
 // @access     Private
 const updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
@@ -160,11 +161,39 @@ const updatePassword = asyncHandler(async (req, res, next) => {
 });
 
 // @desc       Render Form to Reset Password
-// @route      POST /resetpassword/:resettoken
+// @route      GET /resetpassword/:resettoken
 // @access     Public
 const renderResetPasswordForm = (req, res, next) => {
-  res.status(200).render('users/resetPassword');
+  // Get Reset Token
+  const resetToken = req.params.resettoken;
+
+  res.status(200).render('users/resetpassword', { resetToken });
 };
+
+// @desc       Reset Password, then log them in
+// @route      PUT /resetpassword/:resettoken
+// @access     Public
+const resetPassword = asyncHandler(async (req, res, next) => {
+  // Get hashed token
+  const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
+
+  const user = await User.findOne({ resetPasswordToken, resetPasswordExpiration: { $gt: Date.now() } });
+
+  if (!user) {
+    req.flash('error', 'Invalid Token');
+    return res.redirect('users/resetpassword');
+  }
+
+  // Set the new password
+  user.password = req.body.password;
+
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpiration = undefined;
+
+  await user.save();
+
+  sendTokenResponse(user, 200, req, res, 'Password reset successful.');
+});
 
 // @desc       Log User Out / Clear Cookie
 // @route      GET /users/logout
@@ -218,6 +247,7 @@ module.exports = {
   renderUpdatePasswordForm,
   updatePassword,
   renderResetPasswordForm,
+  resetPassword,
   logout,
   getMe,
 };
