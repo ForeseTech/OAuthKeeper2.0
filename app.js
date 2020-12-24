@@ -25,7 +25,7 @@ const app = express();
 // Views and View Engine
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views/'));
 
 // Body-parser middleware
 app.use(express.json());
