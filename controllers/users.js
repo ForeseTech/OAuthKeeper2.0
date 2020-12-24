@@ -229,10 +229,6 @@ const sendTokenResponse = (user, statusCode, req, res, flashMsg) => {
     httpOnly: true,
   };
 
-  if (process.env.NODE_ENV === 'production') {
-    options.secure = true;
-  }
-
   req.flash('success', flashMsg);
   res.cookie('token', token, options).redirect('/contacts');
 };
