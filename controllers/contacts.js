@@ -101,6 +101,13 @@ const createContact = asyncHandler(async (req, res, next) => {
   // Add user ID to request body
   req.body.user = req.user.id;
 
+  Contact.findOne({ phone: req.body.phone }).then((contact) => {
+    if (contact) {
+      req.flash('error', 'Cannot create contact as this phone number already exists in the DB.');
+      return res.redirect('/contacts');
+    }
+  });
+
   const contact = await Contact.create(req.body);
 
   const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
