@@ -1,4 +1,9 @@
-<% layout("layouts/boilerplate") -%> <%- include("../partials/sidebar.ejs") %>
+<% layout("layouts/boilerplate") -%>
+
+<!-- prettier-ignore -->
+<%- include("../partials/sidebar.ejs") %>
+<!-- prettier-ignore -->
+
 <div class="row mt-5">
   <div class="col-md-10 m-auto">
     <%- include("../partials/flash.ejs") %>
@@ -10,11 +15,10 @@
       New Contact
     </button>
 
-    <input type="text" name="search" id="search" class="form-control float-right col-sm-6 mb-2" placeholder="Search" />
-
     <% if(!contacts.length) { %>
     <p>You have not added any contacts yet.</p>
     <% } else { %>
+    <input type="text" name="search" id="search" class="form-control float-right col-sm-6 mb-2" placeholder="Search" />
     <div id="accordion">
       <% contacts.forEach((contact, index) => { %>
       <div class="card">
@@ -45,13 +49,16 @@
 
         <div id="collapse<%= contact._id %>" class="collapse show" aria-labelledby="headingOne">
           <div class="card-body">
+            <p><b>Phone Number : </b> <%= contact.phone %></p>
             <% if(contact.email) { %>
             <p><b>Email ID : </b> <%= contact.email %></p>
             <% } %> <% if(contact.address) { %>
             <p><b>Address : </b> <%= contact.address %></p>
-            <% } %>
+            <% } %> <% if(contact.mode) { %>
             <p><b>Interview Mode : </b> <%= contact.mode %></p>
+            <% } %> <% if(contact.count) { %>
             <p><b>HR Count : </b> <%= contact.count %></p>
+            <% } %>
 
             <div class="text-right">
               <button
@@ -127,7 +134,7 @@
       </div>
 
       <div class="modal-body">
-        <form method="POST" id="edit-contact-form">
+        <form method="POST" id="edit-contact-form" class="validated-form" novalidate>
           <input type="hidden" name="_method" value="PUT" />
           <%- include("../partials/form_fields.ejs"); %>
           <div class="modal-footer">
