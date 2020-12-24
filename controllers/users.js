@@ -6,14 +6,14 @@ const sendEmail = require('../utils/sendEmail');
 const { format } = require('date-fns');
 
 // @desc       Render Form For User Registration
-// @route      GET /register
+// @route      GET /users/register
 // @access     Public
 const renderRegister = (req, res, next) => {
   res.status(200).render('users/register');
 };
 
 // @desc       Register User, Then Redirect To Dashboard
-// @route      POST /register
+// @route      POST /users/register
 // @access     Public
 const registerUser = asyncHandler(async (req, res, next) => {
   const { email, password, password2 } = req.body;
@@ -38,18 +38,18 @@ const registerUser = asyncHandler(async (req, res, next) => {
   const user = await User.create(req.body);
 
   // Send token response
-  sendTokenResponse(user, 200, req, res, `Welcome ${user.name}`);
+  sendTokenResponse(user, 200, req, res, `Welcome, ${user.name}`);
 });
 
 // @desc       Render Form For User Login
-// @route      GET /login
+// @route      GET /users/login
 // @access     Public
 const renderLogin = (req, res, next) => {
   res.status(200).render('users/login');
 };
 
 // @desc       Log User In, Then Redirect To Dashboard
-// @route      POST /login
+// @route      POST /users/login
 // @access     Public
 const loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
@@ -83,18 +83,24 @@ const loginUser = asyncHandler(async (req, res, next) => {
   });
 
   // Send token response
-  sendTokenResponse(user, 200, req, res, `Welcome ${user.name}`);
+  sendTokenResponse(user, 200, req, res, `Welcome, ${user.name}`);
 });
 
+// @desc       Render Form To Accept E-Mail From User Who Has Forgotten Password
+// @route      GET /users/forgotpassword
+// @access     Public
 const renderForgotPasswordForm = (req, res, next) => {
-  res.status(200).render('users/forgotPassword');
+  res.status(200).render('users/forgotpassword');
 };
 
+// @desc       Send link to reset password to user e-mail
+// @route      POST /users/forgotpassword
+// @access     Public
 const forgotPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    req.flash('error', 'There is no user with that email');
+    req.flash('error', 'No such user exists');
     return res.redirect('/users/forgotpassword');
   }
 
@@ -106,7 +112,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   // Reset URL
   const resetURL = `${req.protocol}://${req.get('host')}/users/resetpassword/${resetToken}`;
 
-  const message = `You are receiving this message because you (or someone else) has requested the reset of a forgotPassword. Please click on the following link to reset your password\n\n ${resetURL}`;
+  const message = `You are receiving this message because you (or someone else) has requested the reset of your password. Please click <a href=${resetURL}>here</a> to reset your password.`;
 
   try {
     await sendEmail({
@@ -124,21 +130,27 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
     await user.save({ validateBeforeSave: false });
 
     req.flash('error', 'Email could not be sent. Please contact administrator.');
-    return res.redirect('/users/forgotPassword');
+    return res.redirect('/users/forgotpassword');
   }
 });
 
+// @desc       Render Form To Update Password for Logged in User
+// @route      GET /users/updatepassword
+// @access     Private
 const renderUpdatePasswordForm = (req, res, next) => {
-  res.status(200).render('users/updatePassword');
+  res.status(200).render('users/updatepassword');
 };
 
+// @desc       Update Password in DB
+// @route      POST /users/updatepassword
+// @access     Private
 const updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
   // Check current password
   if (!(await user.matchPassword(req.body.currentPassword))) {
     req.flash('error', 'Incorrect password entered.');
-    return res.redirect('/users/updatePassword');
+    return res.redirect('/users/updatepassword');
   }
 
   user.password = req.body.newPassword;
@@ -147,8 +159,15 @@ const updatePassword = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, req, res, 'Updated Password Successfully');
 });
 
+// @desc       Render Form to Reset Password
+// @route      POST /resetpassword/:resettoken
+// @access     Public
+const renderResetPasswordForm = (req, res, next) => {
+  res.status(200).render('users/resetPassword');
+};
+
 // @desc       Log User Out / Clear Cookie
-// @route      GET /logout
+// @route      GET /users/logout
 // @access     Private
 const logout = asyncHandler(async (req, res, next) => {
   res.cookie('token', 'none', {
@@ -161,7 +180,7 @@ const logout = asyncHandler(async (req, res, next) => {
 });
 
 // @desc       Get currently logged in user
-// @route      GET /me
+// @route      GET /users/me
 // @access     Private
 const getMe = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
@@ -198,6 +217,7 @@ module.exports = {
   forgotPassword,
   renderUpdatePasswordForm,
   updatePassword,
+  renderResetPasswordForm,
   logout,
   getMe,
 };
