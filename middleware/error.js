@@ -14,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse(message, 404);
   }
 
-  // Mongoose Duplicate Key - Is triggered when we try to insert a bootcamp with a duplicate name
+  // Mongoose Duplicate Key - Is triggered when we try to insert a contact with a duplicate phone
   if (err.code === 11000) {
     const message = `Duplicate field value entered`;
     error = new ErrorResponse(message, 400);
@@ -25,11 +25,6 @@ const errorHandler = (err, req, res, next) => {
     const message = Object.values(err.errors).map((val) => val.message);
     error = new ErrorResponse(message, 400);
   }
-
-  res.status(error.statusCode || 500).json({
-    success: false,
-    error: error.message || 'Server error',
-  });
 };
 
 module.exports = errorHandler;
