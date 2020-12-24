@@ -4,6 +4,7 @@ const {
   registerUser,
   renderLogin,
   loginUser,
+  confirmEmail,
   renderForgotPasswordForm,
   forgotPassword,
   renderUpdatePasswordForm,
@@ -21,6 +22,8 @@ const { protect } = require('../middleware/auth');
 router.route('/register').get(renderRegister).post(registerUser);
 
 router.route('/login').get(renderLogin).post(loginUser);
+
+router.route('/confirmemail').get(confirmEmail);
 
 router.route('/forgotpassword').get(renderForgotPasswordForm).post(forgotPassword);
 

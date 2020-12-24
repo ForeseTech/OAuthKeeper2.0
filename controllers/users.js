@@ -38,8 +38,27 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
   const user = await User.create(req.body);
 
+  // Generate E-Mail Confirmation Token
+  const confirmEmailToken = user.generateEmailConfirmToken();
+
+  // Create Reset URL
+  const confirmEmailURL = `${req.protocol}://${req.get('host')}/users/confirmemail?token=${confirmEmailToken}`;
+
+  const message = `You are receiving this email because you need to confirm your email address. Click <a href="${confirmEmailURL}">here</a> to confirm your e-mail.`;
+
+  user.save({ validateBeforeSave: false });
+
+  await sendEmail({
+    email,
+    subject: 'OAuthKeeper - Confirm Your E-Mail ID',
+    message,
+  });
+
+  req.flash('success', 'A confirmation mail has been sent to your E-Mail ID.');
+  res.redirect('/users/login');
+
   // Send token response
-  sendTokenResponse(user, 200, req, res, `Welcome, ${user.name}`);
+  // sendTokenResponse(user, 200, req, res, `Welcome, ${user.name}`);
 });
 
 // @desc       Render Form For User Login
@@ -69,6 +88,11 @@ const loginUser = asyncHandler(async (req, res, next) => {
     return res.redirect('/users/login');
   }
 
+  if (!user.isEmailConfirmed) {
+    req.flash('error', 'Please confirm your E-Mail ID first.');
+    return res.redirect('/users/login');
+  }
+
   // Check if password matches
   const isMatch = await user.matchPassword(password);
 
@@ -85,6 +109,40 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
   // Send token response
   sendTokenResponse(user, 200, req, res, `Welcome, ${user.name}`);
+});
+
+// @desc       Confirm Email
+// @route      GET /users/confirmemail
+// @access     Public
+const confirmEmail = asyncHandler(async (req, res, next) => {
+  const { token } = req.query;
+
+  if (!token) {
+    return next(new ErrorResponse('Invalid Token', 400));
+  }
+
+  const splitToken = token.split('.')[0];
+  const confirmEmailToken = crypto.createHash('sha256').update(splitToken).digest('hex');
+
+  // get user by token
+  const user = await User.findOne({
+    confirmEmailToken,
+    isEmailConfirmed: false,
+  });
+
+  if (!user) {
+    return next(new ErrorResponse('Invalid Token', 400));
+  }
+
+  // update confirmed to true
+  user.confirmEmailToken = undefined;
+  user.isEmailConfirmed = true;
+
+  // save
+  user.save({ validateBeforeSave: false });
+
+  // return token
+  sendTokenResponse(user, 200, req, res, 'Your E-Mail ID was successfully verified.');
 });
 
 // @desc       Render Form To Accept E-Mail From User Who Has Forgotten Password
@@ -238,6 +296,7 @@ module.exports = {
   registerUser,
   renderLogin,
   loginUser,
+  confirmEmail,
   renderForgotPasswordForm,
   forgotPassword,
   renderUpdatePasswordForm,
