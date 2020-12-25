@@ -1,7 +1,24 @@
 <% layout("layouts/boilerplate") -%>
 
-<div class="col-md-9 m-auto stats">
-  <% statuses.forEach((status) => { %>
-  <div class="stat"><%= status._id %> - <%= status.count %></div>
-  <% }) %>
+<!-- prettier-ignore -->
+<%- include("../partials/sidebar.ejs") %>
+<!-- prettier-ignore -->
+
+<div class="mt-5">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Number of HR's</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% statuses.forEach((status) => { %>
+      <tr>
+        <td><%= status._id %></td>
+        <td><%= status.count %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
 </div>

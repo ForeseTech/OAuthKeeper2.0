@@ -25,17 +25,17 @@
         <div class="card-header" id="headingOne">
           <p class="contact-header">
             <%= contact.name %> (<%= contact.company %>)
-            <span class="status"> <%= contact.status %> </span>
-            <span class="member">
+            <div class="contact-info"> <%= contact.status %> </div>
+            <div class="contact-info">
               <!-- prettier-ignore -->
               <% if(contact.user.name) { %>
-               <%= contact.user.name %> 
+                <%= contact.user.name %> 
               <% } %> 
               <% if(contact.user.incharge) { %>
                 / <%= contact.user.incharge %>
               <% } %>
               <!-- prettier-ignore -->
-            </span>
+            </div>
             <i
               class="fa fa-chevron-down"
               data-toggle="collapse"
@@ -45,6 +45,7 @@
               aria-expanded="true"
             ></i>
           </p>
+
         </div>
 
         <div id="collapse<%= contact._id %>" class="collapse show" aria-labelledby="headingOne">
