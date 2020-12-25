@@ -83,7 +83,7 @@ const getStatistics = asyncHandler(async (req, res, next) => {
       {
         $group: {
           _id: '$status',
-          count: { $sum: 1 },
+          count: { $sum: '$count' },
         },
       },
     ]);

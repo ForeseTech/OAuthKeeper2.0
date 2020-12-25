@@ -54,6 +54,7 @@ const ContactSchema = new mongoose.Schema({
 
   count: {
     type: Number,
+    default: 1,
   },
 
   user: {
