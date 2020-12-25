@@ -25,17 +25,17 @@
         <div class="card-header" id="headingOne">
           <p class="contact-header">
             <%= contact.name %> (<%= contact.company %>)
-            <div class="contact-info"> <%= contact.status %> </div>
-            <div class="contact-info">
-              <!-- prettier-ignore -->
+            <div class="contact-info contactStatus"> <%= contact.status %> </div>
+            <% if(!(role === "Member")) { %> 
+            <div class="contact-info contactIncharge">
+              <% if(contact.user.incharge) { %>
+                <%= contact.user.incharge %> /
+              <% } %>
               <% if(contact.user.name) { %>
                 <%= contact.user.name %> 
               <% } %> 
-              <% if(contact.user.incharge) { %>
-                / <%= contact.user.incharge %>
-              <% } %>
-              <!-- prettier-ignore -->
             </div>
+            <% } %> 
             <i
               class="fa fa-chevron-down"
               data-toggle="collapse"
@@ -61,6 +61,7 @@
             <p><b>HR Count : </b> <%= contact.count %></p>
             <% } %>
 
+            <% if(!(role === "Executive Director")) { %> 
             <div class="text-right">
               <button
                 type="button"
@@ -88,8 +89,8 @@
               >
                 Delete
               </button>
-              <!-- </form> -->
             </div>
+            <% } %> 
           </div>
         </div>
       </div>
