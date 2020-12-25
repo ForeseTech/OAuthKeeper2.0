@@ -38,6 +38,8 @@ const getContacts = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).render('contacts/dashboard.ejs', {
+    name: req.user.name,
+    role: req.user.role,
     contacts,
   });
 });
