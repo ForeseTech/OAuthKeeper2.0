@@ -79,6 +79,7 @@ for (let i = 0; i < editBtns.length; i++) {
     editForm['mode'].value = this.getAttribute('data-mode') ?? '';
     editForm['count'].value = parseInt(this.getAttribute('data-count')) ?? '';
     editForm['address'].value = this.getAttribute('data-address') ?? '';
+    editForm['comments'].value = this.getAttribute('data-comments') ?? '';
 
     const deptPreferences = this.getAttribute('data-deptPreferences').split(',');
     const deptPreference = editForm['deptPreference'];

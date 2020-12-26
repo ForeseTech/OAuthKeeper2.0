@@ -63,6 +63,11 @@ const ContactSchema = new mongoose.Schema({
     default: 1,
   },
 
+  comments: {
+    type: String,
+    trim: true,
+  },
+
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
