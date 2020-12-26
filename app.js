@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv').config();
+const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -30,6 +31,11 @@ app.set('views', path.join(__dirname, 'views/'));
 // Body-parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Dev logging middleware
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 // Method-override middleware
 app.use(
