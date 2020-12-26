@@ -11,14 +11,18 @@
   </div>
 
   <div class="col-md-10 m-auto">
+    <% if(!(role === "Executive Director")) { %> 
     <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#newContact">
       New Contact
     </button>
+    <% } %> 
+  </div>
 
+  <div class="col-md-10 m-auto">
     <% if(!contacts.length) { %>
     <p>You have not added any contacts yet.</p>
     <% } else { %>
-    <input type="text" name="search" id="search" class="form-control float-right col-sm-6 mb-2" placeholder="Search" />
+    <input type="text" name="search" id="search" class="form-control offset-sm-6 col-sm-6 mb-2" placeholder="Search" />
     <div id="accordion">
       <% contacts.forEach((contact, index) => { %>
       <div class="card">
