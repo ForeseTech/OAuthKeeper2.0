@@ -60,6 +60,9 @@
             <% } %> <% if(contact.count) { %>
             <p><b>HR Count : </b> <%= contact.count %></p>
             <% } %>
+            <% if(contact.deptPreference && contact.deptPreference.length) { %> 
+              <p><b>Department Preferences : </b><%= contact.deptPreference %></p>
+            <% } %> 
 
             <% if(!(role === "Executive Director")) { %> 
             <div class="text-right">
@@ -76,6 +79,7 @@
                 data-status="<%= contact.status %>"
                 data-mode="<%= contact.mode %>"
                 data-count="<%= contact.count %> "
+                data-deptPreferences = <%= contact.deptPreference %> 
                 data-address="<%= contact.address %>"
               >
                 Edit

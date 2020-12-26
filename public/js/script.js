@@ -79,6 +79,15 @@ for (let i = 0; i < editBtns.length; i++) {
     editForm['mode'].value = this.getAttribute('data-mode') ?? '';
     editForm['count'].value = parseInt(this.getAttribute('data-count')) ?? '';
     editForm['address'].value = this.getAttribute('data-address') ?? '';
+
+    const deptPreferences = this.getAttribute('data-deptPreferences').split(',');
+    const deptPreference = editForm['deptPreference'];
+
+    for (let i = 0; i < deptPreference.length; i++) {
+      if (deptPreferences.includes(deptPreference[i].value)) {
+        deptPreference[i].checked = true;
+      }
+    }
   });
 }
 

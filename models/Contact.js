@@ -47,6 +47,12 @@ const ContactSchema = new mongoose.Schema({
     default: 'Not Called',
   },
 
+  deptPreference: {
+    type: [String],
+    required: true,
+    enum: ['AUT', 'BIO', 'CHE', 'CIV', 'CSE', 'ECE', 'EEE', 'INT', 'MEC'],
+  },
+
   mode: {
     type: String,
     enum: ['Offline', 'Online'],
