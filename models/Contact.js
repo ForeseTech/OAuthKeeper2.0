@@ -31,6 +31,11 @@ const ContactSchema = new mongoose.Schema({
     trim: true,
   },
 
+  ownTransport: {
+    type: Boolean,
+    default: false,
+  },
+
   status: {
     type: String,
     enum: [

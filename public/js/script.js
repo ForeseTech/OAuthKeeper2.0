@@ -78,7 +78,6 @@ for (let i = 0; i < editBtns.length; i++) {
     editForm['status'].value = this.getAttribute('data-status') ?? '';
     editForm['mode'].value = this.getAttribute('data-mode') ?? '';
     editForm['count'].value = parseInt(this.getAttribute('data-count')) ?? '';
-    editForm['address'].value = this.getAttribute('data-address') ?? '';
     editForm['comments'].value = this.getAttribute('data-comments') ?? '';
 
     const deptPreferences = this.getAttribute('data-deptPreferences').split(',');
@@ -88,6 +87,22 @@ for (let i = 0; i < editBtns.length; i++) {
       if (deptPreferences.includes(deptPreference[i].value)) {
         deptPreference[i].checked = true;
       }
+    }
+
+    const ownTransport = editForm['ownTransport'];
+    const isOwnTransport = this.getAttribute('data-ownTransport');
+
+    // Hide address field if the contact choose ownTransport
+    if (isOwnTransport == 'true') {
+      console.log('hello');
+      ownTransport.checked = true;
+      editForm['address'].classList.add('d-none');
+      editForm['address'].previousElementSibling.classList.add('d-none');
+    } else {
+      ownTransport.checked = false;
+      editForm['address'].value = this.getAttribute('data-address') ?? '';
+      editForm['address'].classList.remove('d-none');
+      editForm['address'].previousElementSibling.classList.remove('d-none');
     }
   });
 }

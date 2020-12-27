@@ -49,7 +49,7 @@ const getContacts = asyncHandler(async (req, res, next) => {
 // @access     Private
 const getStatistics = asyncHandler(async (req, res, next) => {
   let statuses;
-  // If user is member, show only their contacts
+
   if (req.user.role === 'Member') {
     statuses = await Contact.aggregate([
       { $match: { user: req.user._id } },
@@ -60,10 +60,7 @@ const getStatistics = asyncHandler(async (req, res, next) => {
         },
       },
     ]);
-  }
-
-  // Show contacts of all team members if user is an ED
-  else if (req.user.role === 'Executive Director') {
+  } else if (req.user.role === 'Executive Director') {
     // Get the ID's of the members whose ED incharge is the logged in user
     const members = await User.find({ incharge: req.user.name }, '_id');
 
@@ -77,10 +74,7 @@ const getStatistics = asyncHandler(async (req, res, next) => {
         },
       },
     ]);
-  }
-
-  // Show all contacts if user is an Admin
-  else if (req.user.role == 'Admin') {
+  } else if (req.user.role == 'Admin') {
     statuses = await Contact.aggregate([
       {
         $group: {
@@ -110,7 +104,16 @@ const createContact = asyncHandler(async (req, res, next) => {
     }
   });
 
+  // Set address to empty string if contact wishes to use own transport
+  if (req.body.ownTransport) {
+    req.body.address = '';
+    req.body.ownTransport = true;
+  } else {
+    req.body.ownTransport = false;
+  }
+
   const contact = await Contact.create(req.body);
+  console.log(contact);
 
   const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
   let data = `${formatDate} ${req.body.user} added ${contact.name} (${contact.company}) as a contact.\n`;
@@ -137,7 +140,16 @@ const updateContact = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`User ${req.user.name} is not authorized to access this contact`, 401));
   }
 
+  // Set address to empty string if contact wishes to use own transport
+  if (req.body.ownTransport) {
+    req.body.ownTransport = true;
+    req.body.address = '';
+  } else {
+    req.body.ownTransport = false;
+  }
+
   contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+  console.log(contact);
 
   const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
   let data = `${formatDate} ${req.body.user} updated ${contact.name} (${contact.company}) in his/her contacts\n`;
