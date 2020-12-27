@@ -14,7 +14,7 @@ const getContacts = asyncHandler(async (req, res, next) => {
 
   // If user is member, show only their contacts
   if (req.user.role === 'Member') {
-    contacts = await Contact.find({ user: req.user.id });
+    contacts = await Contact.find({ user: req.user.id }).sort('-createdAt');
   }
 
   // Show contacts of all team members if user is an ED
@@ -23,18 +23,24 @@ const getContacts = asyncHandler(async (req, res, next) => {
     const members = await User.find({ incharge: req.user.name }, '_id');
 
     // Get contacts of the team members whose ED incharge is the logged in user
-    contacts = await Contact.find().where('user').in(members).populate({
-      path: 'user',
-      select: 'name',
-    });
+    contacts = await Contact.find()
+      .where('user')
+      .in(members)
+      .populate({
+        path: 'user',
+        select: 'name',
+      })
+      .sort('-createdAt');
   }
 
   // Show all contacts if user is an Admin
   else if (req.user.role == 'Admin') {
-    contacts = await Contact.find().populate({
-      path: 'user',
-      select: 'name incharge',
-    });
+    contacts = await Contact.find()
+      .populate({
+        path: 'user',
+        select: 'name incharge',
+      })
+      .sort('-createdAt');
   }
 
   res.status(200).render('contacts/dashboard.ejs', {
