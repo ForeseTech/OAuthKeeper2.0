@@ -1,6 +1,9 @@
 // TODO : Add field for department preference
 // TODO : Add field for number of HR's
+const fs = require('fs');
 const mongoose = require('mongoose');
+
+const { format } = require('date-fns');
 
 const ContactSchema = new mongoose.Schema({
   name: {
@@ -83,6 +86,22 @@ const ContactSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+});
+
+ContactSchema.post('save', function () {
+  const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
+  let data = `${formatDate} ${this.user} added ${this.name} (${this.company}) as a contact.\n`;
+  fs.appendFile('utils/logs/OAuthKeeperLogs.txt', data, (err) => {
+    if (err) throw err;
+  });
+});
+
+ContactSchema.post('findOneAndUpdate', function () {
+  const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
+  let data = `${formatDate} ${this._update['$set'].user} updated ${this._update['$set'].name} (${this._update['$set'].company})\n`;
+  fs.appendFile('utils/logs/OAuthKeeperLogs.txt', data, (err) => {
+    if (err) throw err;
+  });
 });
 
 const Contact = mongoose.model('Contact', ContactSchema);

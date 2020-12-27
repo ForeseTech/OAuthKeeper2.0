@@ -1,10 +1,8 @@
 // TODO : Check out YelpCamp's way of accepting form data using arrays
-const fs = require('fs');
 const Contact = require('../models/Contact');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
-const { format } = require('date-fns');
 
 // @desc       Display contacts according to the role of the user
 // @route      GET /contacts
@@ -119,13 +117,6 @@ const createContact = asyncHandler(async (req, res, next) => {
   }
 
   const contact = await Contact.create(req.body);
-  console.log(contact);
-
-  const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
-  let data = `${formatDate} ${req.body.user} added ${contact.name} (${contact.company}) as a contact.\n`;
-  fs.appendFile('utils/logs/OAuthKeeperLogs.txt', data, (err) => {
-    if (err) throw err;
-  });
 
   req.flash('success', 'New Contact Successfully Added');
   res.redirect('/contacts');
@@ -135,6 +126,9 @@ const createContact = asyncHandler(async (req, res, next) => {
 // @route      PUT /contacts/:id
 // @access     Private
 const updateContact = asyncHandler(async (req, res, next) => {
+  // Add user ID to request body
+  req.body.user = req.user.id;
+
   let contact = await Contact.findById(req.params.id);
 
   if (!contact) {
@@ -154,14 +148,8 @@ const updateContact = asyncHandler(async (req, res, next) => {
     req.body.ownTransport = false;
   }
 
-  contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-  console.log(contact);
-
-  const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
-  let data = `${formatDate} ${req.body.user} updated ${contact.name} (${contact.company}) in his/her contacts\n`;
-  fs.appendFile('utils/logs/OAuthKeeperLogs.txt', data, (err) => {
-    if (err) throw err;
-  });
+  console.log(req.body);
+  contact = await Contact.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
 
   req.flash('success', 'Contact Successfully Updated');
   res.redirect('/contacts');
