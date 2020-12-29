@@ -41,10 +41,54 @@ const getContacts = asyncHandler(async (req, res, next) => {
       .sort('-createdAt');
   }
 
-  res.status(200).render('contacts/dashboard.ejs', {
+  res.render('contacts/dashboard.ejs', {
     name: req.user.name,
     role: req.user.role,
     contacts,
+  });
+});
+
+// @desc       Display contacts according to the role of the user
+// @route      GET /contacts/panel
+// @access     Private
+const getData = asyncHandler(async (req, res, next) => {
+  let contacts;
+
+  // If user is member, show only their contacts
+  if (req.user.role === 'Member') {
+    contacts = await Contact.find({ user: req.user.id }).sort('-createdAt');
+  }
+
+  // Show contacts of all team members if user is an ED
+  else if (req.user.role === 'Executive Director') {
+    // Get the ID's of the members whose ED incharge is the logged in user
+    const members = await User.find({ incharge: req.user.name }, '_id');
+
+    // Get contacts of the team members whose ED incharge is the logged in user
+    contacts = await Contact.find()
+      .where('user')
+      .in(members)
+      .populate({
+        path: 'user',
+        select: 'name',
+      })
+      .sort('-createdAt');
+  }
+
+  // Show all contacts if user is an Admin
+  else if (req.user.role == 'Admin') {
+    contacts = await Contact.find()
+      .populate({
+        path: 'user',
+        select: 'name incharge',
+      })
+      .sort('-createdAt');
+  }
+
+  res.render('contacts/tabulation.ejs', {
+    contacts,
+    name: req.user.name,
+    role: req.user.role,
   });
 });
 
@@ -60,7 +104,17 @@ const getStatistics = asyncHandler(async (req, res, next) => {
       {
         $group: {
           _id: '$status',
-          count: { $sum: 1 },
+          count: { $sum: '$count' },
+        },
+      },
+    ]);
+
+    modes = await Contact.aggregate([
+      { $match: { user: req.user._id } },
+      {
+        $group: {
+          _id: '$mode',
+          count: { $sum: '$count' },
         },
       },
     ]);
@@ -74,7 +128,17 @@ const getStatistics = asyncHandler(async (req, res, next) => {
       {
         $group: {
           _id: '$status',
-          count: { $sum: 1 },
+          count: { $sum: '$count' },
+        },
+      },
+    ]);
+
+    modes = await Contact.aggregate([
+      { $match: { user: { $in: memberIds } } },
+      {
+        $group: {
+          _id: '$mode',
+          count: { $sum: '$count' },
         },
       },
     ]);
@@ -87,10 +151,22 @@ const getStatistics = asyncHandler(async (req, res, next) => {
         },
       },
     ]);
+
+    modes = await Contact.aggregate([
+      {
+        $group: {
+          _id: '$mode',
+          count: { $sum: '$count' },
+        },
+      },
+    ]);
   }
 
-  res.status(200).render('contacts/statistics.ejs', {
+  res.render('contacts/statistics.ejs', {
     statuses,
+    modes,
+    name: req.user.name,
+    role: req.user.role,
   });
 });
 
@@ -126,9 +202,6 @@ const createContact = asyncHandler(async (req, res, next) => {
 // @route      PUT /contacts/:id
 // @access     Private
 const updateContact = asyncHandler(async (req, res, next) => {
-  // Add user ID to request body
-  req.body.user = req.user.id;
-
   let contact = await Contact.findById(req.params.id);
 
   if (!contact) {
@@ -148,7 +221,6 @@ const updateContact = asyncHandler(async (req, res, next) => {
     req.body.ownTransport = false;
   }
 
-  console.log(req.body);
   contact = await Contact.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
 
   req.flash('success', 'Contact Successfully Updated');
@@ -178,6 +250,7 @@ const deleteContact = asyncHandler(async (req, res, next) => {
 
 module.exports = {
   getContacts,
+  getData,
   getStatistics,
   createContact,
   updateContact,

@@ -1,0 +1,38 @@
+<% layout("layouts/boilerplate") -%>
+
+<!-- prettier-ignore -->
+<%- include("../partials/navbar.ejs") %>
+<!-- prettier-ignore -->
+
+<div class="mt-5">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>SNO</th>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Number of HR's</th>
+        <th>Status</th>
+        <th>Interview Mode</th>
+        <th>Incharge</th>
+        <th>Department Preference</th>
+        <th>Requirements</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% contacts.forEach((contact, index) => {  %> 
+        <tr>
+          <td><%= index + 1 %> </td>
+          <td><%= contact.name %> </td>
+          <td><%= contact.company %> </td>
+          <td><%= contact.count %> </td>
+          <td><%= contact.status %> </td>
+          <td><%= contact.mode %> </td>
+          <td><%= contact.user.name %> </td>
+          <td><%= contact.deptPreference %> </td>
+          <td><%= contact.comments %> </td>
+        </tr>
+      <% }); %> 
+    </tbody>
+  </table>
+</div>

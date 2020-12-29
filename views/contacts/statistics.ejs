@@ -1,10 +1,12 @@
 <% layout("layouts/boilerplate") -%>
 
 <!-- prettier-ignore -->
-<%- include("../partials/sidebar.ejs") %>
+<%- include("../partials/navbar.ejs") %>
 <!-- prettier-ignore -->
 
 <div class="mt-5">
+  <% if(statuses && statuses.length) { %> 
+  <p><b>Status Statistics</b></p>
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -21,4 +23,29 @@
       <% }) %>
     </tbody>
   </table>
+  <% } else { %> 
+    <p>Status Statistics not available becuase you (or your team members) have not added any contacts yet.</p>
+  <% } %> 
+
+  <% if(modes && modes.length) { %> 
+  <p><b>Online / Offline Mode Statistics</b></p>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Mode</th>
+        <th>Number of HR's</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% modes.forEach((mode) => {  %> 
+        <tr>
+          <td><%= mode._id ? mode._id : "Unconfirmed Contacts" %> </td>
+          <td><%= mode.count %> </td>
+        </tr>
+      <% }); %> 
+    </tbody>
+  </table>
+  <% } else { %> 
+    <p>Online/Offline Statistics not available becuase you (or your team members) have not created any contacts yet.</p>
+  <% } %> 
 </div>
