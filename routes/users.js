@@ -12,7 +12,6 @@ const {
   renderResetPasswordForm,
   resetPassword,
   logout,
-  getMe,
 } = require('../controllers/users');
 
 const router = express.Router();
@@ -30,8 +29,6 @@ router.route('/forgotpassword').get(renderForgotPasswordForm).post(forgotPasswor
 router.route('/updatepassword').get(protect, renderUpdatePasswordForm).put(protect, updatePassword);
 
 router.route('/resetpassword/:resettoken').get(renderResetPasswordForm).put(resetPassword);
-
-router.route('/me').get(protect, getMe);
 
 router.route('/logout').get(logout);
 

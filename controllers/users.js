@@ -1,16 +1,14 @@
-const fs = require('fs');
 const crypto = require('crypto');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const sendEmail = require('../utils/sendEmail');
-const { format } = require('date-fns');
 
 // @desc       Render Form For User Registration
 // @route      GET /users/register
 // @access     Public
 const renderRegister = (req, res, next) => {
-  res.status(200).render('users/register');
+  res.render('users/register');
 };
 
 // @desc       Register User, Then Redirect To Dashboard
@@ -56,16 +54,13 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
   req.flash('success', 'A confirmation mail has been sent to your E-Mail ID.');
   res.redirect('/users/login');
-
-  // Send token response
-  // sendTokenResponse(user, 200, req, res, `Welcome, ${user.name}`);
 });
 
 // @desc       Render Form For User Login
 // @route      GET /users/login
 // @access     Public
 const renderLogin = (req, res, next) => {
-  res.status(200).render('users/login');
+  res.render('users/login');
 };
 
 // @desc       Log User In, Then Redirect To Dashboard
@@ -101,11 +96,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
     return res.redirect('/users/login');
   }
 
-  const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
-  let data = `${formatDate} ${user.name} logged in.\n`;
-  fs.appendFile('utils/logs/OAuthKeeperLogs.txt', data, (err) => {
-    if (err) throw err;
-  });
+  user.logger();
 
   // Send token response
   sendTokenResponse(user, 200, req, res, `Welcome, ${user.name}`);
@@ -149,7 +140,7 @@ const confirmEmail = asyncHandler(async (req, res, next) => {
 // @route      GET /users/forgotpassword
 // @access     Public
 const renderForgotPasswordForm = (req, res, next) => {
-  res.status(200).render('users/forgotpassword');
+  res.render('users/forgotpassword');
 };
 
 // @desc       Send link to reset password to user e-mail
@@ -197,7 +188,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
 // @route      GET /users/updatepassword
 // @access     Private
 const renderUpdatePasswordForm = (req, res, next) => {
-  res.status(200).render('users/updatepassword');
+  res.render('users/updatepassword');
 };
 
 // @desc       Update Password in DB
@@ -225,7 +216,7 @@ const renderResetPasswordForm = (req, res, next) => {
   // Get Reset Token
   const resetToken = req.params.resettoken;
 
-  res.status(200).render('users/resetpassword', { resetToken });
+  res.render('users/resetpassword', { resetToken });
 };
 
 // @desc       Reset Password, then log them in
@@ -266,18 +257,6 @@ const logout = asyncHandler(async (req, res, next) => {
   res.redirect('/users/login');
 });
 
-// @desc       Get currently logged in user
-// @route      GET /users/me
-// @access     Private
-const getMe = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id);
-
-  res.status(200).json({
-    success: true,
-    data: user,
-  });
-});
-
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, req, res, flashMsg) => {
   const token = user.getSignedJwtToken();
@@ -304,5 +283,4 @@ module.exports = {
   renderResetPasswordForm,
   resetPassword,
   logout,
-  getMe,
 };
