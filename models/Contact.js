@@ -96,13 +96,5 @@ ContactSchema.post('save', function () {
   });
 });
 
-ContactSchema.post('findOneAndUpdate', function () {
-  const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
-  let data = `${formatDate} ${this._update['$set'].user} updated ${this._update['$set'].name} (${this._update['$set'].company})\n`;
-  fs.appendFile('utils/logs/OAuthKeeperLogs.txt', data, (err) => {
-    if (err) throw err;
-  });
-});
-
-const Contact = mongoose.model('Contact', ContactSchema);
+const Contact = mongoose.model('Contact', ContactSchema, 'contacts');
 module.exports = Contact;

@@ -1,7 +1,9 @@
+const fs = require('fs');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { format } = require('date-fns');
 
 const UserSchema = mongoose.Schema({
   name: {
@@ -104,5 +106,13 @@ UserSchema.methods.generateEmailConfirmToken = function () {
   return confirmTokenCombined;
 };
 
-const User = mongoose.model('User', UserSchema);
+UserSchema.methods.logger = function () {
+  const formatDate = format(Date.now(), 'd MMMM yyyy h:m:s b');
+  let data = `${formatDate} ${this.name} logged in.\n`;
+  fs.appendFile('utils/logs/OAuthKeeperLogs.txt', data, (err) => {
+    if (err) throw err;
+  });
+};
+
+const User = mongoose.model('User', UserSchema, 'members');
 module.exports = User;
