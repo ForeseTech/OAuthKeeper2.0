@@ -4,35 +4,194 @@
 <%- include("../partials/navbar.ejs") %>
 <!-- prettier-ignore -->
 
-<div class="mt-5">
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>SNO</th>
-        <th>Name</th>
-        <th>Company</th>
-        <th>Number of HR's</th>
-        <th>Status</th>
-        <th>Interview Mode</th>
-        <th>Incharge</th>
-        <th>Department Preference</th>
-        <th>Requirements</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% contacts.forEach((contact, index) => {  %> 
-        <tr>
-          <td><%= index + 1 %> </td>
-          <td><%= contact.name %> </td>
-          <td><%= contact.company %> </td>
-          <td><%= contact.count %> </td>
-          <td><%= contact.status %> </td>
-          <td><%= contact.mode %> </td>
-          <td><%= contact.user.name %> </td>
-          <td><%= contact.deptPreference %> </td>
-          <td><%= contact.comments %> </td>
-        </tr>
-      <% }); %> 
-    </tbody>
-  </table>
+<p class="mb-0 mt-3"><b>Toggle Columns</b></p>
+<div class="form-check form-check-inline">
+  <label class="form-check-label">
+    <input name="column" type="checkbox" class="form-check-input" value="name" />
+    Name
+  </label>
 </div>
+
+<div class="form-check form-check-inline">
+  <label class="form-check-label">
+    <input name="column" type="checkbox" class="form-check-input" value="company" />
+    Company
+  </label>
+</div>
+
+<div class="form-check form-check-inline">
+  <label class="form-check-label">
+    <input name="column" type="checkbox" class="form-check-input" value="count" />
+    No of HR's
+  </label>
+</div>
+
+<div class="form-check form-check-inline">
+  <label class="form-check-label">
+    <input name="column" type="checkbox" class="form-check-input" value="status" />
+    Status
+  </label>
+</div>
+
+<div class="form-check form-check-inline">
+  <label class="form-check-label">
+    <input name="column" type="checkbox" class="form-check-input" value="mode" />
+    Interview Mode
+  </label>
+</div>
+
+<div class="form-check form-check-inline">
+  <label class="form-check-label">
+    <input name="column" type="checkbox" class="form-check-input" value="incharge" />
+    Incharge
+  </label>
+</div>
+
+<div class="form-check form-check-inline">
+  <label class="form-check-label">
+    <input name="column" type="checkbox" class="form-check-input" value="preference" />
+    Department Preference
+  </label>
+</div>
+
+<div class="form-check form-check-inline">
+  <label class="form-check-label">
+    <input name="column" type="checkbox" class="form-check-input" value="comments" />
+    Requirements
+  </label>
+</div>
+
+<div>
+  <button id="download-xlsx" class="btn btn-primary mb-2">Download As Excel File</button>
+  <button id="download-pdf" class="btn btn-secondary mb-2">Download As PDF</button>
+</div>
+
+<table class="table table-bordered" id="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Company</th>
+      <th>No of HR's</th>
+      <th>Status</th>
+      <th>Interview Mode</th>
+      <th>Incharge</th>
+      <th>Department Preference</th>
+      <th>Requirements</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% contacts.forEach((contact) => { %>
+    <tr>
+      <td><%= contact.name %></td>
+      <td><%= contact.company %></td>
+      <td><%= contact.count %></td>
+      <td><%= contact.status %></td>
+      <td><%= contact.mode %></td>
+      <td><%= contact.user.name %></td>
+      <td><%= contact.deptPreference %></td>
+      <td><%= contact.comments %></td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>
+
+<script>
+  let table = new Tabulator('#table', {
+    layout: 'fitColumns',
+    columns: [
+      {
+        title: 'Name',
+        field: 'name',
+      },
+      {
+        title: 'Company',
+        field: 'company',
+      },
+      {
+        title: "No of HR's",
+        field: 'count',
+      },
+      {
+        title: 'Status',
+        field: 'status',
+        editor: 'select',
+        editorParams: {
+          values: {
+            'Not Called': 'Not Called',
+            'Wrong Number': 'Wrong Number',
+            'Called/Declined': 'Called/Declined',
+            'Called/Not Reachable': 'Not Reachable',
+            'Called/Postponed': 'Called/Postponed',
+            'Called/Accepted': 'Called/Accepted',
+            'Emailed/Awaiting Response': 'Emailed/Awaiting Response',
+            'Emailed/Declined': 'Emailed/Declined',
+            'Emailed/Confirmed': 'Emailed/Confirmed',
+          },
+        },
+        headerFilter: true,
+        headerFilterParams: {
+          values: {
+            '': 'Show All',
+            'Not Called': 'Not Called',
+            'Wrong Number': 'Wrong Number',
+            'Called/Declined': 'Called/Declined',
+            'Called/Not Reachable': 'Not Reachable',
+            'Called/Postponed': 'Called/Postponed',
+            'Called/Accepted': 'Called/Accepted',
+            'Emailed/Awaiting Response': 'Emailed/Awaiting Response',
+            'Emailed/Declined': 'Emailed/Declined',
+            'Emailed/Confirmed': 'Emailed/Confirmed',
+          },
+        },
+      },
+      {
+        title: 'Interview Mode',
+        field: 'mode',
+        editor: 'select',
+        editorParams: {
+          values: {
+            Offline: 'Offline',
+            Online: 'Online',
+          },
+        },
+        headerFilter: true,
+        headerFilterParams: {
+          values: { '': 'Show All', Offline: 'Offline', Online: 'Online' },
+        },
+      },
+      {
+        title: 'Incharge',
+        field: 'incharge',
+      },
+      {
+        title: 'Department Preference',
+        field: 'preference',
+      },
+      {
+        title: 'Requirements',
+        field: 'comments',
+      },
+    ],
+  });
+
+  // Show / Hide Columns Dynamically
+  const checkboxes = document.querySelectorAll("input[type='checkbox']");
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', function () {
+      table.toggleColumn(checkbox.value);
+    });
+  });
+
+  // Trigger download of data.xlsx file
+  document.getElementById('download-xlsx').addEventListener('click', function () {
+    table.download('xlsx', 'data.xlsx', { sheetName: 'My Data' });
+  });
+
+  // Trigger download of data.pdf file
+  document.getElementById('download-pdf').addEventListener('click', function () {
+    table.download('pdf', 'data.pdf', {
+      orientation: 'portrait', //set page orientation to portrait
+      title: 'HR Contacts', //add title to report
+    });
+  });
+</script>
