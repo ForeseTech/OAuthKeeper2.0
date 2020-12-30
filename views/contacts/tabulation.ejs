@@ -7,56 +7,56 @@
 <p class="mb-0 mt-3"><b>Toggle Columns</b></p>
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="name" />
+    <input name="column" type="checkbox" class="form-check-input" value="name" checked />
     Name
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="company" />
+    <input name="column" type="checkbox" class="form-check-input" value="company" checked />
     Company
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="count" />
+    <input name="column" type="checkbox" class="form-check-input" value="count" checked />
     No of HR's
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="status" />
+    <input name="column" type="checkbox" class="form-check-input" value="status" checked />
     Status
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="mode" />
+    <input name="column" type="checkbox" class="form-check-input" value="mode" checked />
     Interview Mode
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="incharge" />
+    <input name="column" type="checkbox" class="form-check-input" value="incharge" checked />
     Incharge
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="preference" />
+    <input name="column" type="checkbox" class="form-check-input" value="preference" checked />
     Department Preference
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="comments" />
+    <input name="column" type="checkbox" class="form-check-input" value="comments" checked />
     Requirements
   </label>
 </div>
@@ -98,6 +98,7 @@
 <script>
   let table = new Tabulator('#table', {
     layout: 'fitColumns',
+    responsiveLayout: true,
     columns: [
       {
         title: 'Name',
