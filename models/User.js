@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { format } = require('date-fns');
+const { userInfo } = require('os');
 
 const UserSchema = mongoose.Schema({
   name: {
@@ -25,11 +26,11 @@ const UserSchema = mongoose.Schema({
     required: [true, 'Please add a password'],
     minlength: 6,
     select: false,
-    // TODO : Check for password strength
   },
 
   role: {
     type: String,
+    required: [true, 'Please select a role'],
     enum: ['Member', 'Executive Director', 'Admin'],
     default: 'Member',
   },
@@ -79,6 +80,11 @@ UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
+// Check if user has verfied his/her email
+UserSchema.methods.confirmEmail = async function () {
+  return this.isEmailConfirmed;
+};
+
 // Generate and hash password token
 UserSchema.methods.getResetPasswordToken = function () {
   // Generate Token
@@ -98,6 +104,7 @@ UserSchema.methods.generateEmailConfirmToken = function () {
   // Generate Email confirmation token
   const confirmationToken = crypto.randomBytes(20).toString('hex');
 
+  // Hash token and set to confirmEmail token
   this.confirmEmailToken = crypto.createHash('sha256').update(confirmationToken).digest('hex');
 
   const confirmTokenExtend = crypto.randomBytes(100).toString('hex');

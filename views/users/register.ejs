@@ -10,7 +10,7 @@
       <form action="/users/register" method="POST" class="validated-form" novalidate>
         <div class="form-group">
           <label for="name">Name</label>
-          <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name" required />
+          <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name" autofocus required />
         </div>
 
         <div class="form-group">
@@ -26,8 +26,10 @@
             id="password"
             class="form-control"
             placeholder="Enter Password"
+            minlength="6"
             required
           />
+          <div class="invalid-feedback">Password is required and must consist of atleast 6 characters</div>
         </div>
 
         <div class="form-group">

@@ -17,18 +17,6 @@ const renderRegister = (req, res, next) => {
 const registerUser = asyncHandler(async (req, res, next) => {
   const { email, password, password2 } = req.body;
 
-  User.findOne({ email: email }).then((user) => {
-    if (user) {
-      req.flash('error', 'A user with the E-Mail ID already exists.');
-      return res.redirect('/users/register');
-    }
-  });
-
-  if (password.length < 6) {
-    req.flash('error', 'Password length must be atleast 6 characters.');
-    return res.redirect('/users/register');
-  }
-
   if (password !== password2) {
     req.flash('error', 'Passwords do not match.');
     return res.redirect('/users/register');
@@ -83,14 +71,14 @@ const loginUser = asyncHandler(async (req, res, next) => {
     return res.redirect('/users/login');
   }
 
-  if (!user.isEmailConfirmed) {
+  const isEmailConfirmed = await user.confirmEmail();
+  if (!isEmailConfirmed) {
     req.flash('error', 'Please confirm your E-Mail ID first.');
     return res.redirect('/users/login');
   }
 
   // Check if password matches
   const isMatch = await user.matchPassword(password);
-
   if (!isMatch) {
     req.flash('error', 'Invalid Login Credentials.');
     return res.redirect('/users/login');
@@ -99,7 +87,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
   user.logger();
 
   // Send token response
-  sendTokenResponse(user, 200, req, res, `Welcome, ${user.name}`);
+  sendTokenResponse(user, req, res, `Welcome, ${user.name}`);
 });
 
 // @desc       Confirm Email
@@ -115,7 +103,7 @@ const confirmEmail = asyncHandler(async (req, res, next) => {
   const splitToken = token.split('.')[0];
   const confirmEmailToken = crypto.createHash('sha256').update(splitToken).digest('hex');
 
-  // get user by token
+  // Get user by token
   const user = await User.findOne({
     confirmEmailToken,
     isEmailConfirmed: false,
@@ -125,15 +113,14 @@ const confirmEmail = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Invalid Token', 400));
   }
 
-  // update confirmed to true
+  // Update confirmed to true
   user.confirmEmailToken = undefined;
   user.isEmailConfirmed = true;
 
-  // save
   user.save({ validateBeforeSave: false });
 
-  // return token
-  sendTokenResponse(user, 200, req, res, 'Your E-Mail ID was successfully verified.');
+  // Send token response
+  sendTokenResponse(user, req, res, 'Your E-Mail ID was successfully verified.');
 });
 
 // @desc       Render Form To Accept E-Mail From User Who Has Forgotten Password
@@ -206,7 +193,7 @@ const updatePassword = asyncHandler(async (req, res, next) => {
   user.password = req.body.newPassword;
   await user.save();
 
-  sendTokenResponse(user, 200, req, res, 'Updated Password Successfully');
+  sendTokenResponse(user, req, res, 'Updated Password Successfully');
 });
 
 // @desc       Render Form to Reset Password
@@ -233,15 +220,21 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     return res.redirect('users/resetpassword');
   }
 
+  const { password, password2 } = req.body;
+  if (password !== password2) {
+    req.flash('error', 'Passwords do not match.');
+    return res.redirect(`/users/resetpassword/${req.params.resettoken}`);
+  }
+
   // Set the new password
-  user.password = req.body.password;
+  user.password = password;
 
   user.resetPasswordToken = undefined;
   user.resetPasswordExpiration = undefined;
 
   await user.save();
 
-  sendTokenResponse(user, 200, req, res, 'Password reset successful.');
+  sendTokenResponse(user, req, res, 'Password reset successful.');
 });
 
 // @desc       Log User Out / Clear Cookie
@@ -258,7 +251,7 @@ const logout = asyncHandler(async (req, res, next) => {
 });
 
 // Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, req, res, flashMsg) => {
+const sendTokenResponse = (user, req, res, flashMsg) => {
   const token = user.getSignedJwtToken();
 
   const options = {
