@@ -74,7 +74,8 @@
       <th>No of HR's</th>
       <th>Status</th>
       <th>Interview Mode</th>
-      <th>Incharge</th>
+      <th>2nd Year Member</th>
+      <th>ED Incharge</th>
       <th>Department Preference</th>
       <th>Requirements</th>
     </tr>
@@ -88,6 +89,7 @@
       <td><%= contact.status %></td>
       <td><%= contact.mode %></td>
       <td><%= contact.user.name %></td>
+      <td><%= contact.user.incharge %></td>
       <td><%= contact.deptPreference %></td>
       <td><%= contact.comments %></td>
     </tr>
@@ -161,8 +163,33 @@
         },
       },
       {
-        title: 'Incharge',
+        title: '2nd Year Member',
+        field: 'member',
+      },
+      {
+        title: 'ED Incharge',
         field: 'incharge',
+        editor: 'select',
+        editorParams: {
+          values: {
+            Adhihariharan: 'Adhihariharan',
+            Anuja: 'Anuja',
+            Dhivya: 'Dhivya',
+            Govind: 'Govind',
+            Joann: 'Joann',
+          },
+        },
+        headerFilter: true,
+        headerFilterParams: {
+          values: {
+            '': 'Show All',
+            Adhihariharan: 'Adhihariharan',
+            Anuja: 'Anuja',
+            Dhivya: 'Dhivya',
+            Govind: 'Govind',
+            Joann: 'Joann',
+          },
+        },
       },
       {
         title: 'Department Preference',
