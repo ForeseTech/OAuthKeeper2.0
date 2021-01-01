@@ -4,10 +4,7 @@ const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 
-// @desc       Display contacts according to the role of the user
-// @route      GET /contacts
-// @access     Private
-const getContacts = asyncHandler(async (req, res, next) => {
+const getContacts = async (req, res, view) => {
   let contacts;
 
   // If user is member, show only their contacts
@@ -41,61 +38,31 @@ const getContacts = asyncHandler(async (req, res, next) => {
       .sort('-createdAt');
   }
 
-  res.render('contacts/dashboard.ejs', {
+  res.render(view, {
     name: req.user.name,
     role: req.user.role,
     contacts,
   });
+};
+
+// @desc       Display contacts according to the role of the user
+// @route      GET /contacts
+// @access     Private
+const renderDashboard = asyncHandler(async (req, res, next) => {
+  getContacts(req, res, 'contacts/dashboard.ejs');
 });
 
 // @desc       Display contacts according to the role of the user
 // @route      GET /contacts/panel
 // @access     Private
-const getData = asyncHandler(async (req, res, next) => {
-  let contacts;
-
-  // If user is member, show only their contacts
-  if (req.user.role === 'Member') {
-    contacts = await Contact.find({ user: req.user.id }).sort('-createdAt');
-  }
-
-  // Show contacts of all team members if user is an ED
-  else if (req.user.role === 'Executive Director') {
-    // Get the ID's of the members whose ED incharge is the logged in user
-    const members = await User.find({ incharge: req.user.name }, '_id');
-
-    // Get contacts of the team members whose ED incharge is the logged in user
-    contacts = await Contact.find()
-      .where('user')
-      .in(members)
-      .populate({
-        path: 'user',
-        select: 'name',
-      })
-      .sort('-createdAt');
-  }
-
-  // Show all contacts if user is an Admin
-  else if (req.user.role == 'Admin') {
-    contacts = await Contact.find()
-      .populate({
-        path: 'user',
-        select: 'name incharge',
-      })
-      .sort('-createdAt');
-  }
-
-  res.render('contacts/tabulation.ejs', {
-    contacts,
-    name: req.user.name,
-    role: req.user.role,
-  });
+const renderTable = asyncHandler(async (req, res, next) => {
+  getContacts(req, res, 'contacts/tabulation.ejs');
 });
 
 // @desc       Display stats for each user
 // @route      GET /contacts/statistics
 // @access     Private
-const getStatistics = asyncHandler(async (req, res, next) => {
+const renderStatistics = asyncHandler(async (req, res, next) => {
   let statuses;
 
   if (req.user.role === 'Member') {
@@ -249,9 +216,9 @@ const deleteContact = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = {
-  getContacts,
-  getData,
-  getStatistics,
+  renderDashboard,
+  renderTable,
+  renderStatistics,
   createContact,
   updateContact,
   deleteContact,

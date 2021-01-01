@@ -1,20 +1,20 @@
 const express = require('express');
 const {
+  renderDashboard,
+  renderTable,
+  renderStatistics,
   createContact,
-  getContacts,
   updateContact,
   deleteContact,
-  getStatistics,
-  getData,
 } = require('../controllers/contacts');
 
 const { protect, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.route('/').get(protect, getContacts).post(protect, authorize('Member', 'Admin'), createContact);
-router.route('/panel').get(protect, getData);
-router.route('/statistics').get(protect, getStatistics);
+router.route('/').get(protect, renderDashboard).post(protect, authorize('Member', 'Admin'), createContact);
+router.route('/panel').get(protect, renderTable);
+router.route('/statistics').get(protect, renderStatistics);
 
 router
   .route('/:id')

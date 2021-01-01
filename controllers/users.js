@@ -91,7 +91,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
 });
 
 // @desc       Confirm Email
-// @route      GET /users/confirmemail
+// @route      GET /users/confirmemail?token=token
 // @access     Public
 const confirmEmail = asyncHandler(async (req, res, next) => {
   const { token } = req.query;

@@ -4,7 +4,6 @@ const cards = document.getElementsByClassName('card');
 
 searchBox.addEventListener('keyup', function () {
   const searchInput = searchBox.value.toUpperCase();
-  console.log(searchInput);
 
   for (let i = 0; i < cards.length; i++) {
     const contactHeader = cards[i].getElementsByClassName('contact-header')[0].innerText;
@@ -94,14 +93,17 @@ for (let i = 0; i < editBtns.length; i++) {
 
     // Hide address field if the contact choose ownTransport
     if (isOwnTransport == 'true') {
-      console.log('hello');
       ownTransport.checked = true;
+      // Hide address input
       editForm['address'].classList.add('d-none');
+      // Hide address label
       editForm['address'].previousElementSibling.classList.add('d-none');
     } else {
       ownTransport.checked = false;
       editForm['address'].value = this.getAttribute('data-address') ?? '';
+      // Show address input
       editForm['address'].classList.remove('d-none');
+      // Show address label
       editForm['address'].previousElementSibling.classList.remove('d-none');
     }
   });
