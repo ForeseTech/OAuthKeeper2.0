@@ -1,5 +1,3 @@
-// TODO : Add field for department preference
-// TODO : Add field for number of HR's
 const fs = require('fs');
 const mongoose = require('mongoose');
 

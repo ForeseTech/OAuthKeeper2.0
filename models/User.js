@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { format } = require('date-fns');
-const { userInfo } = require('os');
 
 const UserSchema = mongoose.Schema({
   name: {

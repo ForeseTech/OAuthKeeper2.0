@@ -68,23 +68,5 @@
 
     <!-- Custom JS -->
     <script src="/js/script.js"></script>
-
-    <!-- JavaScript to accept address input only if contact is not using own transport -->
-    <script>
-      const ownTransport = document.querySelectorAll("input[name='ownTransport']");
-      const address = document.querySelectorAll("textarea[name='address']");
-
-      for (let i = 0; i < ownTransport.length; i++) {
-        ownTransport[i].addEventListener('change', function () {
-          if (ownTransport[i].checked) {
-            address[i].classList.add('d-none');
-            address[i].previousElementSibling.classList.add('d-none');
-          } else {
-            address[i].classList.remove('d-none');
-            address[i].previousElementSibling.classList.remove('d-none');
-          }
-        });
-      }
-    </script>
   </body>
 </html>

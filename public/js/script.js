@@ -15,42 +15,31 @@ searchBox.addEventListener('keyup', function () {
   }
 });
 
-// Colors for members, incharges and statuses
-const contactIncharge = document.getElementsByClassName('contactIncharge');
+// Colors for ED Incharges and Statuses
 const contactStatus = document.getElementsByClassName('contactStatus');
+const statusColors = {
+  'Emailed/Confirmed': '#00A878',
+  'Called/Accepted': '#00A878',
+  'Called/Declined': '#D62839',
+  'Emailed/Declined': '#D62839',
+  'Not Called': '#011627',
+  'Wrong Number': '#4B3832',
+  'Called/Not Reachable': '#F26419',
+  'Called/Postponed': '#7A3B69',
+  'Emailed/Awaiting Response': '#FDCA40',
+};
 
 for (let i = 0; i < contactStatus.length; i++) {
-  if (['Emailed/Confirmed', 'Called/Accepted'].includes(contactStatus[i].innerText)) {
-    contactStatus[i].style.backgroundColor = '#00A878';
-  } else if (['Called/Declined', 'Emailed/Declined'].includes(contactStatus[i].innerText)) {
-    contactStatus[i].style.backgroundColor = '#D62839';
-  } else if (contactStatus[i].innerText == 'Not Called') {
-    contactStatus[i].style.backgroundColor = '#011627';
-  } else if (contactStatus[i].innerText == 'Wrong Number') {
-    contactStatus[i].style.backgroundColor = '#4B3832';
-  } else if (contactStatus[i].innerText == 'Called/Not Reachable') {
-    contactStatus[i].style.backgroundColor = '#F26419';
-  } else if (contactStatus[i].innerText == 'Called/Postponed') {
-    contactStatus[i].style.backgroundColor = '#7A3B69';
-  } else if (contactStatus[i].innerText == 'Emailed/Awaiting Response') {
-    contactStatus[i].style.backgroundColor = '#FDCA40';
-  }
+  const status = contactStatus[i].innerText;
+  contactStatus[i].style.backgroundColor = statusColors[status];
 }
 
+const contactIncharge = document.getElementsByClassName('contactIncharge');
+const edColors = { Adhihariharan: '#2191FB', Anuja: '#994636', Dhivya: '#005b96', Govind: '#FFAD05', Joann: '#CE6D8B' };
+
 for (let i = 0; i < contactIncharge.length; i++) {
-  if (contactIncharge[i].innerText.includes('Adhihariharan')) {
-    contactIncharge[i].style.backgroundColor = '#2191FB';
-  } else if (contactIncharge[i].innerText.includes('Anuja')) {
-    contactIncharge[i].style.backgroundColor = '#994636';
-  } else if (contactIncharge[i].innerText.includes('Dhivya')) {
-    contactIncharge[i].style.backgroundColor = '#005b96';
-  } else if (contactIncharge[i].innerText.includes('Govind')) {
-    contactIncharge[i].style.backgroundColor = '#FFAD05';
-  } else if (contactIncharge[i].innerText.includes('Joann')) {
-    contactIncharge[i].style.backgroundColor = '#CE6D8B';
-  } else {
-    contactIncharge[i].style.backgroundColor = '#35C4C8';
-  }
+  const edName = contactIncharge[i].innerText.split(' /')[0];
+  contactIncharge[i].style.backgroundColor = edColors[edName] ?? '#35C4C8';
 }
 
 // Change chevron direction
@@ -60,6 +49,22 @@ for (let i = 0; i < chevron.length; i++) {
   chevron[i].addEventListener('click', function () {
     chevron[i].classList.toggle('fa-chevron-down');
     chevron[i].classList.toggle('fa-chevron-up');
+  });
+}
+
+// Hide address input and label if contact choose ownTransport
+const ownTransport = document.querySelectorAll("input[name='ownTransport']");
+const address = document.querySelectorAll("textarea[name='address']");
+
+for (let i = 0; i < ownTransport.length; i++) {
+  ownTransport[i].addEventListener('change', function () {
+    if (ownTransport[i].checked) {
+      address[i].classList.add('d-none');
+      address[i].previousElementSibling.classList.add('d-none');
+    } else {
+      address[i].classList.remove('d-none');
+      address[i].previousElementSibling.classList.remove('d-none');
+    }
   });
 }
 
@@ -88,18 +93,17 @@ for (let i = 0; i < editBtns.length; i++) {
       }
     }
 
-    const ownTransport = editForm['ownTransport'];
     const isOwnTransport = this.getAttribute('data-ownTransport');
 
-    // Hide address field if the contact choose ownTransport
+    // Hide address field if the contact chooses ownTransport
     if (isOwnTransport == 'true') {
-      ownTransport.checked = true;
+      editForm['ownTransport'].checked = true;
       // Hide address input
       editForm['address'].classList.add('d-none');
       // Hide address label
       editForm['address'].previousElementSibling.classList.add('d-none');
     } else {
-      ownTransport.checked = false;
+      editForm['ownTransport'].checked = false;
       editForm['address'].value = this.getAttribute('data-address') ?? '';
       // Show address input
       editForm['address'].classList.remove('d-none');
