@@ -6,6 +6,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
+const favicon = require('serve-favicon');
 
 const errorHandler = require('./middleware/error');
 
@@ -15,6 +16,9 @@ const usersRouter = require('./routes/users');
 
 // Instantiate express app
 const app = express();
+
+// Exclude requests for favicon in morgan
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 // Views and View Engine
 app.engine('ejs', ejsMate);
