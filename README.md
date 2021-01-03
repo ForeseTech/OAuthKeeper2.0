@@ -1,6 +1,6 @@
 # OAuthKeeper
 
-A simple yet functional REST application to manage HR contacts for MOCK PLACEMENTS (2021). It lets only authorized users to view certain contacts. Built with NodeJS, Express, Mongoose and EJS.
+A simple yet functional REST application to manage HR contacts for MOCK PLACEMENTS (2021). It lets only authorized users to view certain contacts. Built with NodeJS, Express, Mongoose and EJS. Deployed to Heroku.
 
 ## Contents
 - [Motivation](#motivation)
@@ -139,6 +139,7 @@ OAuthKeeper2.0/
 
 ## Contributors
 * Design and Development - [Nilesh D](https://github.com/Nilesh2000)
+* Inputs - Adhihariharan, Dhivya, Joann
 
 ## Contributing
 Please feel free to fork, comment, critique, or submit a pull request.
