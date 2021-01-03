@@ -42,15 +42,22 @@
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="incharge" checked />
-    Incharge
+    <input name="column" type="checkbox" class="form-check-input" value="member" <% if(!(role === "Member")) { %>
+    checked <% } %> /> 2<sup>nd</sup> Year Member
+  </label>
+</div>
+
+<div class="form-check form-check-inline">
+  <label class="form-check-label">
+    <input name="column" type="checkbox" class="form-check-input" value="incharge" <% if(role === "Admin") { %> checked
+    <% } %> /> ED Incharge
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
     <input name="column" type="checkbox" class="form-check-input" value="preference" checked />
-    Department Preference
+    Dept. Preference
   </label>
 </div>
 
@@ -66,7 +73,7 @@
   <button id="download-pdf" class="btn btn-secondary mb-2">Download As PDF</button>
 </div>
 
-<table class="table table-bordered" id="table">
+<table id="table">
   <thead>
     <tr>
       <th>Name</th>
@@ -204,6 +211,15 @@
 
   // Show / Hide Columns Dynamically
   const checkboxes = document.querySelectorAll("input[type='checkbox']");
+
+  checkboxes.forEach((checkbox) => {
+    if (!checkbox.checked) {
+      table.hideColumn(checkbox.value);
+      checkbox.classList.add('d-none');
+      checkbox.parentElement.parentElement.classList.add('d-none');
+    }
+  });
+
   checkboxes.forEach((checkbox) => {
     checkbox.addEventListener('change', function () {
       table.toggleColumn(checkbox.value);
