@@ -1,15 +1,26 @@
 const mongoose = require('mongoose');
 const colors = require('colors');
 
-const connectDB = async () => {
-  const conn = await mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  });
+class Database {
+  constructor() {
+    this.connect();
+  }
 
-  console.log(`MongoDB Connected : ${conn.connection.host}`.cyan.underline);
-};
+  connect() {
+    mongoose
+      .connect(process.env.MONGO_URI, {
+        useCreateIndex: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      })
+      .then((conn) => {
+        console.log(`MongoDB Connected : ${conn.connection.host}`.cyan.underline);
+      })
+      .catch((err) => {
+        console.log('Database connection error : ' + err);
+      });
+  }
+}
 
-module.exports = connectDB;
+module.exports = new Database();
