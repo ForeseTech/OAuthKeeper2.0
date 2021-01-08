@@ -25,7 +25,7 @@ const ContactSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: [true, 'Please add a phone number'],
-      match: [/^[1234567890]{10}|[1234567890](8)$/, 'Please add a valid phone number'],
+      match: [/^[1234567890]{10}|[1234567890]{8}$/, 'Please add a valid phone number'],
       unique: [true, 'Phone number already exists'],
     },
 
