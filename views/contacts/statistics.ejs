@@ -48,4 +48,100 @@
   <% } else { %> 
     <p><b>Online/Offline Statistics not available becuase you (or your team members) have not created any contacts yet.</b></p>
   <% } %> 
+
+  <% if(teams && teams.length) { %> 
+    <p><b>Team - Wise Statistics</b></p>
+    <table id="teams" class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="width: 4%;">SNO</th>
+          <th style="width: 12%">ED Incharge</th>
+          <th style="width: 19%;">Member Name</th>
+          <th style="width: 8%;">Not Called</th>
+          <th style="width: 8%;">Wrong Number</th>
+          <th style="width: 8%;">Called/Declined</th>
+          <th style="width: 8%;">Called/Not Reachable</th>
+          <th style="width: 8%;">Called/Postponed</th>
+          <th style="width: 8%;">Called/Accepted</th>
+          <th style="width: 8%;">Emailed/Awaiting Response</th>
+          <th style="width: 8%;">Emailed/Declined</th>
+          <th style="width: 8%;">Emailed/Confirmed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% teams.forEach((team, index) => { %> 
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= team.user["incharge"]  %> </td>
+            <td><b><%= team.user["name"] %></b></td>
+            <td>
+              <% if(team._id["status"] === "Not Called" && team.count != 0) { %> 
+                <%= team.count %> 
+              <% } else { %> 
+                0 
+              <% } %> 
+            </td>
+            <td>
+              <% if(team._id["status"] === "Wrong Number" && team.count != 0) { %>
+                <%= team.count %> 
+              <% } else { %>
+                0 
+              <% } %> 
+            </td>
+            <td>
+              <% if(team._id["status"] === "Called/Declined" && team.count != 0) { %>
+                <%= team.count %> 
+              <% } else { %>
+                0 
+              <% } %> 
+            </td>
+            <td>
+              <% if(team._id["status"] === "Called/Not Reachable" && team.count != 0) { %>
+                <%= team.count %> 
+              <% } else { %>
+                0 
+              <% } %> 
+            </td>
+            <td>
+              <% if(team._id["status"] === "Called/Postponed" && team.count != 0) { %>
+                <%= team.count %> 
+              <% } else { %>
+                0 
+              <% } %> 
+            </td>
+            <td>
+              <% if(team._id["status"] === "Called/Accepted" && team.count != 0) { %>
+                <%= team.count %> 
+              <% } else { %>
+                0 
+              <% } %> 
+            </td>
+            <td>
+              <% if(team._id["status"] === "Emailed/Awaiting Response" && team.count != 0) { %>
+                <%= team.count %> 
+              <% } else { %>
+                0 
+              <% } %> 
+            </td>
+            <td>
+              <% if(team._id["status"] === "EmailedDeclined" && team.count != 0) { %>
+                <%= team.count %> 
+              <% } else { %>
+                0 
+              <% } %> 
+            </td>
+            <td>
+              <% if(team._id["status"] === "Emailed/Confirmed" && team.count != 0) { %>
+                <%= team.count %> 
+              <% } else { %>
+                0 
+              <% } %> 
+            </td>
+          </tr>
+        <% }); %> 
+      </tbody>
+    </table>
+  <% } else { %> 
+    <p><b>Team Wise Statistics not available becuase you (or your team members) have not created any contacts yet.</b></p>
+  <% } %> 
 </div>

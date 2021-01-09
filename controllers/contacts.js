@@ -127,11 +127,42 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
         },
       },
     ]);
+
+    teams = await Contact.aggregate([
+      {
+        $group: {
+          _id: { user: '$user', status: '$status' },
+          count: { $sum: '$count' },
+        },
+      },
+      {
+        $lookup: {
+          from: 'members',
+          localField: '_id.user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: { path: '$user' },
+      },
+      {
+        $project: {
+          'user.name': 1,
+          'user.incharge': 1,
+          count: 1,
+        },
+      },
+      {
+        $sort: { 'user.incharge': 1, 'user.name': 1 },
+      },
+    ]);
   }
 
   res.render('contacts/statistics.ejs', {
     statuses,
     modes,
+    teams,
     name: req.user.name,
     role: req.user.role,
   });
