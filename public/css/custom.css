@@ -1,5 +1,6 @@
 body {
   font-family: 'Lato', sans-serif;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -55,15 +56,19 @@ i {
 
 #teams {
   table-layout: fixed;
-  width: 96%;
+  width: 100%;
+  text-align: center;
 }
 
-#teams thead tr th {
+#teams thead tr th:nth-child(n + 4) {
   white-space: nowrap;
   transform: rotate(-90deg);
   padding: 140px 1px;
-  text-align: center;
   vertical-align: middle;
+}
+
+#teams tfoot {
+  font-weight: bold;
 }
 
 #teams tbody tr td {

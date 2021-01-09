@@ -63,7 +63,7 @@ const renderTable = asyncHandler(async (req, res, next) => {
 // @route      GET /contacts/statistics
 // @access     Private
 const renderStatistics = asyncHandler(async (req, res, next) => {
-  let statuses;
+  let statuses, teams;
 
   if (req.user.role === 'Member') {
     statuses = await Contact.aggregate([
@@ -88,17 +88,7 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
   } else if (req.user.role === 'Executive Director') {
     // Get the ID's of the members whose ED incharge is the logged in user
     const members = await User.find({ incharge: req.user.name }, '_id');
-
     memberIds = members.map((member) => member._id);
-    statuses = await Contact.aggregate([
-      { $match: { user: { $in: memberIds } } },
-      {
-        $group: {
-          _id: '$status',
-          count: { $sum: '$count' },
-        },
-      },
-    ]);
 
     modes = await Contact.aggregate([
       { $match: { user: { $in: memberIds } } },
@@ -109,52 +99,112 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
         },
       },
     ]);
-  } else if (req.user.role == 'Admin') {
-    statuses = await Contact.aggregate([
-      {
-        $group: {
-          _id: '$status',
-          count: { $sum: '$count' },
-        },
-      },
-    ]);
 
-    modes = await Contact.aggregate([
+    teams = await User.aggregate([
       {
-        $group: {
-          _id: '$mode',
-          count: { $sum: '$count' },
-        },
-      },
-    ]);
-
-    teams = await Contact.aggregate([
-      {
-        $group: {
-          _id: { user: '$user', status: '$status' },
-          count: { $sum: '$count' },
-        },
+        $match: { _id: { $in: memberIds } },
       },
       {
         $lookup: {
-          from: 'members',
-          localField: '_id.user',
-          foreignField: '_id',
-          as: 'user',
+          from: 'contacts',
+          let: {
+            user: '$_id',
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ['$$user', '$user'],
+                },
+              },
+            },
+            {
+              $group: {
+                _id: '$status',
+                count: {
+                  $sum: '$count',
+                },
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                k: '$_id',
+                v: '$count',
+              },
+            },
+          ],
+          as: 'statuses',
         },
       },
       {
-        $unwind: { path: '$user' },
-      },
-      {
-        $project: {
-          'user.name': 1,
-          'user.incharge': 1,
-          count: 1,
+        $addFields: {
+          statuses: {
+            $arrayToObject: '$statuses',
+          },
         },
       },
       {
-        $sort: { 'user.incharge': 1, 'user.name': 1 },
+        $sort: { incharge: 1, name: 1 },
+      },
+    ]);
+    console.log(teams);
+  } else if (req.user.role == 'Admin') {
+    modes = await Contact.aggregate([
+      {
+        $group: {
+          _id: '$mode',
+          count: { $sum: '$count' },
+        },
+      },
+    ]);
+
+    teams = await User.aggregate([
+      {
+        $match: { role: 'Member' },
+      },
+      {
+        $lookup: {
+          from: 'contacts',
+          let: {
+            user: '$_id',
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ['$$user', '$user'],
+                },
+              },
+            },
+            {
+              $group: {
+                _id: '$status',
+                count: {
+                  $sum: '$count',
+                },
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                k: '$_id',
+                v: '$count',
+              },
+            },
+          ],
+          as: 'statuses',
+        },
+      },
+      {
+        $addFields: {
+          statuses: {
+            $arrayToObject: '$statuses',
+          },
+        },
+      },
+      {
+        $sort: { incharge: 1, name: 1 },
       },
     ]);
   }

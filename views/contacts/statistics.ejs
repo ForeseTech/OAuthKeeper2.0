@@ -23,8 +23,8 @@
       <% }) %>
     </tbody>
   </table>
-  <% } else { %> 
-    <p><b>Status Statistics not available becuase you (or your team members) have not added any contacts yet.</b></p>
+  <% } else if(role === "Member") { %> 
+    <p><b>Status Statistics not available becuase you have not added any contacts yet.</b></p>
   <% } %> 
 
   <% if(modes && modes.length) { %> 
@@ -49,12 +49,12 @@
     <p><b>Online/Offline Statistics not available becuase you (or your team members) have not created any contacts yet.</b></p>
   <% } %> 
 
-  <% if(teams && teams.length) { %> 
-    <p><b>Team - Wise Statistics</b></p>
-    <table id="teams" class="table table-bordered">
+  <% if(role !== "Member") { %> 
+    <p><b>Member-Wise Statistics</b></p>
+    <table id="teams" class="table table-bordered table-hover">
       <thead>
         <tr>
-          <th style="width: 4%;">SNO</th>
+          <th style="width: 6%;">SNO</th>
           <th style="width: 12%">ED Incharge</th>
           <th style="width: 19%;">Member Name</th>
           <th style="width: 8%;">Not Called</th>
@@ -72,76 +72,37 @@
         <% teams.forEach((team, index) => { %> 
           <tr>
             <td><%= index + 1 %></td>
-            <td><%= team.user["incharge"]  %> </td>
-            <td><b><%= team.user["name"] %></b></td>
-            <td>
-              <% if(team._id["status"] === "Not Called" && team.count != 0) { %> 
-                <%= team.count %> 
-              <% } else { %> 
-                0 
-              <% } %> 
-            </td>
-            <td>
-              <% if(team._id["status"] === "Wrong Number" && team.count != 0) { %>
-                <%= team.count %> 
-              <% } else { %>
-                0 
-              <% } %> 
-            </td>
-            <td>
-              <% if(team._id["status"] === "Called/Declined" && team.count != 0) { %>
-                <%= team.count %> 
-              <% } else { %>
-                0 
-              <% } %> 
-            </td>
-            <td>
-              <% if(team._id["status"] === "Called/Not Reachable" && team.count != 0) { %>
-                <%= team.count %> 
-              <% } else { %>
-                0 
-              <% } %> 
-            </td>
-            <td>
-              <% if(team._id["status"] === "Called/Postponed" && team.count != 0) { %>
-                <%= team.count %> 
-              <% } else { %>
-                0 
-              <% } %> 
-            </td>
-            <td>
-              <% if(team._id["status"] === "Called/Accepted" && team.count != 0) { %>
-                <%= team.count %> 
-              <% } else { %>
-                0 
-              <% } %> 
-            </td>
-            <td>
-              <% if(team._id["status"] === "Emailed/Awaiting Response" && team.count != 0) { %>
-                <%= team.count %> 
-              <% } else { %>
-                0 
-              <% } %> 
-            </td>
-            <td>
-              <% if(team._id["status"] === "EmailedDeclined" && team.count != 0) { %>
-                <%= team.count %> 
-              <% } else { %>
-                0 
-              <% } %> 
-            </td>
-            <td>
-              <% if(team._id["status"] === "Emailed/Confirmed" && team.count != 0) { %>
-                <%= team.count %> 
-              <% } else { %>
-                0 
-              <% } %> 
-            </td>
+            <td><%= team.incharge %></td>
+            <td><%= team.name %></td>
+            <td><%= team["statuses"]["Not Called"] ?  team["statuses"]["Not Called"] : 0 %></td>
+            <td><%= team["statuses"]["Wrong Number"] ?  team["statuses"]["Wrong Number"] : 0 %></td>
+            <td><%= team["statuses"]["Called/Declined"] ?  team["statuses"]["Called/Declined"] : 0 %></td>
+            <td><%= team["statuses"]["Called/Not Reachable"] ?  team["statuses"]["Called/Not Reachable"] : 0 %></td>
+            <td><%= team["statuses"]["Called/Postponed"] ?  team["statuses"]["Called/Postponed"] : 0 %></td>
+            <td><%= team["statuses"]["Called/Accepted"] ?  team["statuses"]["Called/Accepted"] : 0 %></td>
+            <td><%= team["statuses"]["Emailed/Awaiting Response"] ?  team["statuses"]["Emailed/Awaiting Response"] : 0 %></td>
+            <td><%= team["statuses"]["Emailed/Declined"] ?  team["statuses"]["Emailed/Declined"] : 0 %></td>
+            <td><%= team["statuses"]["Emailed/Confirmed"] ?  team["statuses"]["Emailed/Confirmed"] : 0 %></td>
           </tr>
-        <% }); %> 
+        <% }) %>
       </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3"></td>
+        </tr>
+      </tfoot>
     </table>
-  <% } else { %> 
-    <p><b>Team Wise Statistics not available becuase you (or your team members) have not created any contacts yet.</b></p>
   <% } %> 
 </div>
+
+<script>
+  for (let i = 4; i < 13; i++) {
+    let sum = 0;
+    const column = document.querySelectorAll(`#teams tbody tr td:nth-child(${i})`);
+    column.forEach((col) => (sum += parseInt(col.innerText)));
+    const tdNode = document.createElement('td');
+    const textNode = document.createTextNode(sum);
+    tdNode.appendChild(textNode);
+    document.querySelector('#teams tfoot tr').appendChild(tdNode);
+  }
+</script>
