@@ -148,7 +148,6 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
         $sort: { incharge: 1, name: 1 },
       },
     ]);
-    console.log(teams);
   } else if (req.user.role == 'Admin') {
     modes = await Contact.aggregate([
       {
@@ -201,6 +200,14 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
           statuses: {
             $arrayToObject: '$statuses',
           },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: 1,
+          incharge: 1,
+          statuses: 1,
         },
       },
       {
