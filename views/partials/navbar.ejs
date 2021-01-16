@@ -1,47 +1,48 @@
-<div class="mt-3">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">OAuthKeeper</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/contacts">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/contacts/panel">Tabulation</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/contacts/statistics">Statistics</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown">
-          <a
-            href="#"
-            id="navbarDropdownMenuLink"
-            class="nav-link dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <%= (name) %> (<%= (role) %>)
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/users/updatepassword">Update Password</a>
-            <a class="dropdown-item" href="/users/logout">Logout</a>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </nav>
-</div>
+<nav class="navbar navbar-expand-md sticky-top bg-light navbar-light">
+  <a href="#" class="navbar-brand">
+    <img src="/img/logo.png" alt="FORESE Logo" width="80" />
+  </a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target=".navbar-collapse"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/contacts">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/contacts/panel">Tabulation</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/contacts/statistics">Statistics</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a
+          href="#"
+          id="navbarDropdownMenuLink"
+          class="nav-link dropdown-toggle"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <%= (name) %> (<%= (role) %>)
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/users/updatepassword">Update Password</a>
+          <a class="dropdown-item" href="/users/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
