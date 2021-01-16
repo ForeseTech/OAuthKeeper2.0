@@ -51,7 +51,7 @@
 
   <% if(role !== "Member") { %> 
     <p><b>Member-Wise Statistics</b></p>
-    <table id="teams" class="table table-bordered table-hover">
+    <table id="teams" class="table table-bordered">
       <thead>
         <tr>
           <th style="width: 6%;">SNO</th>
@@ -92,11 +92,20 @@
           </tr>
         <% }) %>
       </tbody>
-      <!-- <tfoot>
+      <tfoot>
         <tr>
           <td colspan="3"></td>
+          <td><%= countOfStatus["Not Called"] ? countOfStatus["Not Called"] : 0 %></td>
+          <td><%= countOfStatus["Wrong Number"] ? countOfStatus["Wrong Number"] : 0 %></td>
+          <td><%= countOfStatus["Called/Declined"] ? countOfStatus["Called/Declined"] : 0 %></td>
+          <td><%= countOfStatus["Called/Not Reachable"] ? countOfStatus["Called/Not Reachable"] : 0 %></td>
+          <td><%= countOfStatus["Called/Postponed"] ? countOfStatus["Called/Postponed"] : 0 %></td>
+          <td><%= countOfStatus["Called/Accepted"] ? countOfStatus["Called/Accepted"] : 0 %></td>
+          <td><%= countOfStatus["Emailed/Awaiting Response"] ? countOfStatus["Emailed/Awaiting Response"] : 0 %></td>
+          <td><%= countOfStatus["Emailed/Declined"] ? countOfStatus["Emailed/Declined"] : 0 %></td>
+          <td><%= countOfStatus["Emailed/Confirmed"] ? countOfStatus["Emailed/Confirmed"] : 0 %></td>
         </tr>
-      </tfoot> -->
+      </tfoot>
     </table>
   <% } %> 
 </div>

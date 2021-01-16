@@ -63,8 +63,9 @@ const renderTable = asyncHandler(async (req, res, next) => {
 // @route      GET /contacts/statistics
 // @access     Private
 const renderStatistics = asyncHandler(async (req, res, next) => {
-  let statuses, teams, noOfMembers;
-  let numOfMembers = {};
+  let statuses, teams, noOfMembers, statusCount;
+  let numOfMembers = {},
+    countOfStatus = {};
 
   if (req.user.role === 'Member') {
     statuses = await Contact.aggregate([
@@ -229,6 +230,19 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
     for (let i = 0; i < noOfMembers.length; i++) {
       numOfMembers[noOfMembers[i]._id] = noOfMembers[i].count;
     }
+
+    statusCount = await Contact.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: '$count' },
+        },
+      },
+    ]);
+  }
+
+  for (let i = 0; i < statusCount.length; i++) {
+    countOfStatus[statusCount[i]._id] = statusCount[i].count;
   }
 
   res.render('contacts/statistics.ejs', {
@@ -236,6 +250,7 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
     modes,
     teams,
     numOfMembers,
+    countOfStatus,
     name: req.user.name,
     role: req.user.role,
   });
