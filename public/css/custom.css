@@ -67,6 +67,15 @@ i {
   vertical-align: middle;
 }
 
+.edIncharge {
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+#teams > tbody > tr > td {
+  vertical-align: middle;
+}
+
 #teams tfoot {
   font-weight: bold;
 }

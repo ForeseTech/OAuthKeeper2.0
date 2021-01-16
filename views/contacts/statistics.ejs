@@ -72,37 +72,31 @@
         <% teams.forEach((team, index) => { %> 
           <tr>
             <td><%= index + 1 %></td>
-            <td><%= team.incharge %></td>
+            <% if(index > 0) { %> 
+              <% if(teams[index].incharge !== teams[index - 1].incharge) { %>
+                <td rowspan="<%= numOfMembers[team.incharge] %>" class="edIncharge"><%= team.incharge %></td>
+              <% } %>
+            <% } else { %>
+              <td rowspan="<%= numOfMembers[team.incharge]  %> " class="edIncharge"><%= team.incharge %></td>
+            <% } %> 
             <td><%= team.name %></td>
-            <td><%= team["statuses"]["Not Called"] ?  team["statuses"]["Not Called"] : 0 %></td>
-            <td><%= team["statuses"]["Wrong Number"] ?  team["statuses"]["Wrong Number"] : 0 %></td>
-            <td><%= team["statuses"]["Called/Declined"] ?  team["statuses"]["Called/Declined"] : 0 %></td>
-            <td><%= team["statuses"]["Called/Not Reachable"] ?  team["statuses"]["Called/Not Reachable"] : 0 %></td>
-            <td><%= team["statuses"]["Called/Postponed"] ?  team["statuses"]["Called/Postponed"] : 0 %></td>
-            <td><%= team["statuses"]["Called/Accepted"] ?  team["statuses"]["Called/Accepted"] : 0 %></td>
-            <td><%= team["statuses"]["Emailed/Awaiting Response"] ?  team["statuses"]["Emailed/Awaiting Response"] : 0 %></td>
-            <td><%= team["statuses"]["Emailed/Declined"] ?  team["statuses"]["Emailed/Declined"] : 0 %></td>
-            <td><%= team["statuses"]["Emailed/Confirmed"] ?  team["statuses"]["Emailed/Confirmed"] : 0 %></td>
+            <td><%= team["statuses"]["Not Called"] ? team["statuses"]["Not Called"] : 0 %></td>
+            <td><%= team["statuses"]["Wrong Number"] ? team["statuses"]["Wrong Number"] : 0 %></td>
+            <td><%= team["statuses"]["Called/Declined"] ? team["statuses"]["Called/Declined"] : 0 %></td>
+            <td><%= team["statuses"]["Called/Not Reachable"] ? team["statuses"]["Called/Not Reachable"] : 0 %></td>
+            <td><%= team["statuses"]["Called/Postponed"] ? team["statuses"]["Called/Postponed"] : 0 %></td>
+            <td><%= team["statuses"]["Called/Accepted"] ? team["statuses"]["Called/Accepted"] : 0 %></td>
+            <td><%= team["statuses"]["Emailed/Awaiting Response"] ? team["statuses"]["Emailed/Awaiting Response"] : 0 %></td>
+            <td><%= team["statuses"]["Emailed/Declined"] ? team["statuses"]["Emailed/Declined"] : 0 %></td>
+            <td><%= team["statuses"]["Emailed/Confirmed"] ? team["statuses"]["Emailed/Confirmed"] : 0 %></td>
           </tr>
         <% }) %>
       </tbody>
-      <tfoot>
+      <!-- <tfoot>
         <tr>
           <td colspan="3"></td>
         </tr>
-      </tfoot>
+      </tfoot> -->
     </table>
   <% } %> 
 </div>
-
-<script>
-  for (let i = 4; i < 13; i++) {
-    let sum = 0;
-    const column = document.querySelectorAll(`#teams tbody tr td:nth-child(${i})`);
-    column.forEach((col) => (sum += parseInt(col.innerText)));
-    const tdNode = document.createElement('td');
-    const textNode = document.createTextNode(sum);
-    tdNode.appendChild(textNode);
-    document.querySelector('#teams tfoot tr').appendChild(tdNode);
-  }
-</script>

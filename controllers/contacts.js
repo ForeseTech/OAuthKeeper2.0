@@ -63,7 +63,8 @@ const renderTable = asyncHandler(async (req, res, next) => {
 // @route      GET /contacts/statistics
 // @access     Private
 const renderStatistics = asyncHandler(async (req, res, next) => {
-  let statuses, teams;
+  let statuses, teams, noOfMembers;
+  let numOfMembers = {};
 
   if (req.user.role === 'Member') {
     statuses = await Contact.aggregate([
@@ -214,12 +215,27 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
         $sort: { incharge: 1, name: 1 },
       },
     ]);
+
+    noOfMembers = await User.aggregate([
+      { $match: { incharge: { $in: ['Adhihariharan', 'Anuja', 'Dhivya', 'Govind', 'Joann'] } } },
+      {
+        $group: {
+          _id: '$incharge',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    for (let i = 0; i < noOfMembers.length; i++) {
+      numOfMembers[noOfMembers[i]._id] = noOfMembers[i].count;
+    }
   }
 
   res.render('contacts/statistics.ejs', {
     statuses,
     modes,
     teams,
+    numOfMembers,
     name: req.user.name,
     role: req.user.role,
   });
