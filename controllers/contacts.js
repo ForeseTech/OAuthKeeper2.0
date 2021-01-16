@@ -150,6 +150,36 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
         $sort: { incharge: 1, name: 1 },
       },
     ]);
+
+    noOfMembers = await User.aggregate([
+      { $match: { incharge: req.user.name } },
+      {
+        $group: {
+          _id: '$incharge',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    for (let i = 0; i < noOfMembers.length; i++) {
+      numOfMembers[noOfMembers[i]._id] = noOfMembers[i].count;
+    }
+
+    statusCount = await Contact.aggregate([
+      { $match: { user: { $in: memberIds } } },
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: '$count' },
+        },
+      },
+    ]);
+
+    for (let i = 0; i < statusCount.length; i++) {
+      countOfStatus[statusCount[i]._id] = statusCount[i].count;
+    }
+
+    console.log(countOfStatus);
   } else if (req.user.role == 'Admin') {
     modes = await Contact.aggregate([
       {
@@ -239,10 +269,10 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
         },
       },
     ]);
-  }
 
-  for (let i = 0; i < statusCount.length; i++) {
-    countOfStatus[statusCount[i]._id] = statusCount[i].count;
+    for (let i = 0; i < statusCount.length; i++) {
+      countOfStatus[statusCount[i]._id] = statusCount[i].count;
+    }
   }
 
   res.render('contacts/statistics.ejs', {

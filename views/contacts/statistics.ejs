@@ -72,12 +72,16 @@
         <% teams.forEach((team, index) => { %> 
           <tr>
             <td><%= index + 1 %></td>
-            <% if(index > 0) { %> 
-              <% if(teams[index].incharge !== teams[index - 1].incharge) { %>
-                <td rowspan="<%= numOfMembers[team.incharge] %>" class="edIncharge"><%= team.incharge %></td>
-              <% } %>
-            <% } else { %>
-              <td rowspan="<%= numOfMembers[team.incharge]  %> " class="edIncharge"><%= team.incharge %></td>
+            <% if(role === "Admin") { %> 
+              <% if(index > 0) { %> 
+                <% if(teams[index].incharge !== teams[index - 1].incharge) { %>
+                  <td rowspan="<%= numOfMembers[team.incharge] %>" class="edIncharge"><%= team.incharge %></td>
+                <% } %>
+              <% } else { %>
+                <td rowspan="<%= numOfMembers[team.incharge]  %> " class="edIncharge"><%= team.incharge %></td>
+              <% } %> 
+            <% } else if(role === "Executive Director" && index == 0) { %> 
+              <td rowspan="<%= numOfMembers[name] %>"><%= name %></td>
             <% } %> 
             <td><%= team.name %></td>
             <td><%= team["statuses"]["Not Called"] ? team["statuses"]["Not Called"] : 0 %></td>
