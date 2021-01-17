@@ -53,7 +53,7 @@ There was a need for a solution which would help us get solve all of these probl
 
 Rename the .env.example file to .env and replace it with your credentials.
 
-To get a SendGrid API key, signup for a SendGrid account [here].(https://sendgrid.com/)
+To get a SendGrid API key, signup for a SendGrid account [here](https://sendgrid.com/).
 
 ```
 Install dependencies
