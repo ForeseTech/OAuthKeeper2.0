@@ -137,7 +137,7 @@ OAuthKeeper2.0/
 
 | Create Contact                             | Update Contact                              | Delete Contact                           |
 | ------------------------------------------ | ------------------------------------------- | ---------------------------------------- |
-| <img src="screenshots/create_contact.png"> | <img src="screenshots/update_contacts.png"> | <img src="screenshots/delete_contact.png">
+| <img src="screenshots/create_contact.png"> | <img src="screenshots/update_contact.png"> | <img src="screenshots/delete_contact.png">
 
 ## Tools
 * [Visual Studio Code](https://code.visualstudio.com/)
