@@ -1,6 +1,7 @@
 body {
   font-family: 'Lato', sans-serif;
   overflow-x: hidden;
+  padding-bottom: 3.5rem;
 }
 
 ::-webkit-scrollbar {
@@ -106,9 +107,18 @@ i {
   right: 0;
   bottom: 0;
   padding: 1rem;
+  padding-bottom: 3rem;
   z-index: 1;
   color: #e95420;
   cursor: pointer;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  height: 45px;
+  line-height: 45px;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
