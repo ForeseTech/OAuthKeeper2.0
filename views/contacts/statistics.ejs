@@ -24,24 +24,53 @@
   <% } %> 
 
     <p><b>Statistics</b></p>
-    <table id="teams" class="table table-bordered">
+    <table id="stats" class="table table-bordered">
       <thead>
         <tr>
           <th style="width: 6%;">SNO</th>
-          <th style="width: 12%">ED Incharge</th>
+          <th style="width: 12%;">ED Incharge</th>
           <th style="width: 19%;">Member Name</th>
-          <th style="width: 8%;">Not Called</th>
-          <th style="width: 8%;">Wrong Number</th>
-          <th style="width: 8%;">Called/Declined</th>
-          <th style="width: 8%;">Called/Not Reachable</th>
-          <th style="width: 8%;">Called/Postponed</th>
-          <th style="width: 8%;">Called/Accepted</th>
-          <th style="width: 8%;">Emailed/Awaiting Response</th>
-          <th style="width: 8%;">Emailed/Declined</th>
-          <th style="width: 8%;">Emailed/Confirmed</th>
+
+          <th style="width: 8%;">
+            <div>Not Called</div>
+          </th>
+
+          <th style="width: 8%;">
+            <div>Wrong Number</div>
+          </th>
+
+          <th style="width: 8%;">
+            <div>Called/Declined</div>
+          </th>
+
+          <th style="width: 8%;">
+            <div>Called/Not Reachable</div>
+          </th>
+
+          <th style="width: 8%;">
+            <div>Called/Postponed</div>
+          </th>
+
+          <th style="width: 8%;">
+            <div>Called/Accepted</div>
+          </th>
+
+          <th style="width: 8%;">
+            <div>Emailed/Awaiting Response</div>
+          </th>
+
+          <th style="width: 8%;">
+            <div>Emailed/Declined</div>
+          </th>
+
+          <th style="width: 8%;">
+            <div>Emailed/Confirmed</div>
+          </th>
+
         </tr>
       </thead>
       <tbody>
+
         <% statuses.forEach((status, index) => { %> 
           <tr>
             <td><%= index + 1 %></td>
@@ -73,6 +102,7 @@
           </tr>
         <% }) %>
       </tbody>
+      
       <% if(role !== "Member") { %> 
       <tfoot>
         <tr>

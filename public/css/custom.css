@@ -71,35 +71,42 @@ i {
   margin-bottom: 1rem;
 }
 
-#teams {
+th {
+  background-color: #f1f1f1;
+}
+
+#stats {
   table-layout: fixed;
   width: 100%;
   text-align: center;
 }
 
-#teams thead tr th:nth-child(n + 4) {
-  white-space: nowrap;
+#stats thead tr th {
+  position: sticky;
+  top: 67px;
+}
+
+th > div {
   transform: rotate(-90deg);
-  padding: 140px 1px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#stats tbody tr td {
+  white-space: nowrap;
+  text-align: center;
   vertical-align: middle;
+}
+
+tfoot {
+  font-weight: bold;
 }
 
 .edIncharge {
   font-weight: bold;
   vertical-align: middle;
-}
-
-#teams > tbody > tr > td {
-  vertical-align: middle;
-}
-
-#teams tfoot {
-  font-weight: bold;
-}
-
-#teams tbody tr td {
-  white-space: nowrap;
-  text-align: center;
 }
 
 .new-contact {
