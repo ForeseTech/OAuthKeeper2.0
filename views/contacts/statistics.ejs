@@ -56,7 +56,7 @@
               <% } %> 
             <% } else if(role === "Executive Director" && index == 0) { %> 
               <td rowspan="<%= numOfMembers[name] %>" class="edIncharge"><%= name %></td>
-            <% } else { %> 
+            <% } else if(role === "Member") { %> 
               <td class="edIncharge"><%= status.incharge %></td>
             <% } %> 
 
