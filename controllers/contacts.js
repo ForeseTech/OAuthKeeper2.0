@@ -63,21 +63,11 @@ const renderTable = asyncHandler(async (req, res, next) => {
 // @route      GET /contacts/statistics
 // @access     Private
 const renderStatistics = asyncHandler(async (req, res, next) => {
-  let statuses, teams, noOfMembers, statusCount;
+  let noOfMembers, statusCount;
   let numOfMembers = {},
     countOfStatus = {};
 
   if (req.user.role === 'Member') {
-    statuses = await Contact.aggregate([
-      { $match: { user: req.user._id } },
-      {
-        $group: {
-          _id: '$status',
-          count: { $sum: '$count' },
-        },
-      },
-    ]);
-
     modes = await Contact.aggregate([
       { $match: { user: req.user._id } },
       {
@@ -85,6 +75,66 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
           _id: '$mode',
           count: { $sum: '$count' },
         },
+      },
+      {
+        $sort: { _id: -1 },
+      },
+    ]);
+
+    statuses = await User.aggregate([
+      {
+        $match: { _id: { $in: [req.user._id] } },
+      },
+      {
+        $lookup: {
+          from: 'contacts',
+          let: {
+            user: '$_id',
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ['$$user', '$user'],
+                },
+              },
+            },
+            {
+              $group: {
+                _id: '$status',
+                count: {
+                  $sum: '$count',
+                },
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                k: '$_id',
+                v: '$count',
+              },
+            },
+          ],
+          as: 'statuses',
+        },
+      },
+      {
+        $addFields: {
+          statuses: {
+            $arrayToObject: '$statuses',
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: 1,
+          incharge: 1,
+          statuses: 1,
+        },
+      },
+      {
+        $sort: { incharge: 1, name: 1 },
       },
     ]);
   } else if (req.user.role === 'Executive Director') {
@@ -100,9 +150,12 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
           count: { $sum: '$count' },
         },
       },
+      {
+        $sort: { _id: -1 },
+      },
     ]);
 
-    teams = await User.aggregate([
+    statuses = await User.aggregate([
       {
         $match: { _id: { $in: memberIds } },
       },
@@ -147,6 +200,14 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
         },
       },
       {
+        $project: {
+          _id: 0,
+          name: 1,
+          incharge: 1,
+          statuses: 1,
+        },
+      },
+      {
         $sort: { incharge: 1, name: 1 },
       },
     ]);
@@ -186,9 +247,12 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
           count: { $sum: '$count' },
         },
       },
+      {
+        $sort: { _id: -1 },
+      },
     ]);
 
-    teams = await User.aggregate([
+    statuses = await User.aggregate([
       {
         $match: { role: 'Member' },
       },
@@ -274,9 +338,8 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
   }
 
   res.render('contacts/statistics.ejs', {
-    statuses,
     modes,
-    teams,
+    statuses,
     numOfMembers,
     countOfStatus,
     name: req.user.name,
