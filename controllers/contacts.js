@@ -178,8 +178,6 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
     for (let i = 0; i < statusCount.length; i++) {
       countOfStatus[statusCount[i]._id] = statusCount[i].count;
     }
-
-    console.log(countOfStatus);
   } else if (req.user.role == 'Admin') {
     modes = await Contact.aggregate([
       {
