@@ -4,6 +4,9 @@ const User = require('../models/User');
 
 // Protect Routes
 const protect = asyncHandler(async (req, res, next) => {
+  // Store the URL the user is requesting for incase he isn't logged in and visits a protected route
+  req.session.returnTo = req.originalUrl;
+
   let token;
 
   if (req.cookies.token) {
