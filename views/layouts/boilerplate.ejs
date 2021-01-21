@@ -56,6 +56,12 @@
   </head>
 
   <body>
+    <!-- prettier-ignore -->
+    <% if(typeof name !== "undefined" && typeof role !== "undefined") { %> 
+      <%- include("../partials/navbar.ejs"); %> 
+    <% } %>
+    <!-- prettier-ignore -->
+
     <main class="container"><%- body %></main>
 
     <!-- JavaScript for Accordion -->
