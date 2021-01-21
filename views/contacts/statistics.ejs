@@ -1,11 +1,7 @@
 <% layout("layouts/boilerplate") -%>
 
-<!-- prettier-ignore -->
-<%- include("../partials/navbar.ejs") %>
-<!-- prettier-ignore -->
-
 <div class="mt-5">
-  <% if(statuses && statuses.length) { %> 
+  <% if(statuses && statuses.length) { %>
   <p><b>Status Statistics</b></p>
   <table class="table table-bordered">
     <thead>
@@ -23,11 +19,9 @@
       <% }) %>
     </tbody>
   </table>
-  <% } else if(role === "Member") { %> 
-    <p><b>Status Statistics not available becuase you have not added any contacts yet.</b></p>
-  <% } %> 
-
-  <% if(modes && modes.length) { %> 
+  <% } else if(role === "Member") { %>
+  <p><b>Status Statistics not available becuase you have not added any contacts yet.</b></p>
+  <% } %> <% if(modes && modes.length) { %>
   <p><b>Online / Offline Mode Statistics</b></p>
   <table class="table table-bordered">
     <thead>
@@ -37,79 +31,78 @@
       </tr>
     </thead>
     <tbody>
-      <% modes.forEach((mode) => {  %> 
-        <tr>
-          <td><%= mode._id ? mode._id : "Unconfirmed Contacts" %> </td>
-          <td><%= mode.count %> </td>
-        </tr>
-      <% }); %> 
+      <% modes.forEach((mode) => { %>
+      <tr>
+        <td><%= mode._id ? mode._id : "Unconfirmed Contacts" %></td>
+        <td><%= mode.count %></td>
+      </tr>
+      <% }); %>
     </tbody>
   </table>
-  <% } else { %> 
-    <p><b>Online/Offline Statistics not available becuase you (or your team members) have not created any contacts yet.</b></p>
-  <% } %> 
-
-  <% if(role !== "Member") { %> 
-    <p><b>Member-Wise Statistics</b></p>
-    <table id="teams" class="table table-bordered">
-      <thead>
-        <tr>
-          <th style="width: 6%;">SNO</th>
-          <th style="width: 12%">ED Incharge</th>
-          <th style="width: 19%;">Member Name</th>
-          <th style="width: 8%;">Not Called</th>
-          <th style="width: 8%;">Wrong Number</th>
-          <th style="width: 8%;">Called/Declined</th>
-          <th style="width: 8%;">Called/Not Reachable</th>
-          <th style="width: 8%;">Called/Postponed</th>
-          <th style="width: 8%;">Called/Accepted</th>
-          <th style="width: 8%;">Emailed/Awaiting Response</th>
-          <th style="width: 8%;">Emailed/Declined</th>
-          <th style="width: 8%;">Emailed/Confirmed</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% teams.forEach((team, index) => { %> 
-          <tr>
-            <td><%= index + 1 %></td>
-            <% if(role === "Admin") { %> 
-              <% if(index > 0) { %> 
-                <% if(teams[index].incharge !== teams[index - 1].incharge) { %>
-                  <td rowspan="<%= numOfMembers[team.incharge] %>" class="edIncharge"><%= team.incharge %></td>
-                <% } %>
-              <% } else { %>
-                <td rowspan="<%= numOfMembers[team.incharge]  %> " class="edIncharge"><%= team.incharge %></td>
-              <% } %> 
-            <% } else if(role === "Executive Director" && index == 0) { %> 
-              <td rowspan="<%= numOfMembers[name] %>"><%= name %></td>
-            <% } %> 
-            <td><%= team.name %></td>
-            <td><%= team["statuses"]["Not Called"] ? team["statuses"]["Not Called"] : 0 %></td>
-            <td><%= team["statuses"]["Wrong Number"] ? team["statuses"]["Wrong Number"] : 0 %></td>
-            <td><%= team["statuses"]["Called/Declined"] ? team["statuses"]["Called/Declined"] : 0 %></td>
-            <td><%= team["statuses"]["Called/Not Reachable"] ? team["statuses"]["Called/Not Reachable"] : 0 %></td>
-            <td><%= team["statuses"]["Called/Postponed"] ? team["statuses"]["Called/Postponed"] : 0 %></td>
-            <td><%= team["statuses"]["Called/Accepted"] ? team["statuses"]["Called/Accepted"] : 0 %></td>
-            <td><%= team["statuses"]["Emailed/Awaiting Response"] ? team["statuses"]["Emailed/Awaiting Response"] : 0 %></td>
-            <td><%= team["statuses"]["Emailed/Declined"] ? team["statuses"]["Emailed/Declined"] : 0 %></td>
-            <td><%= team["statuses"]["Emailed/Confirmed"] ? team["statuses"]["Emailed/Confirmed"] : 0 %></td>
-          </tr>
-        <% }) %>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="3"></td>
-          <td><%= countOfStatus["Not Called"] ? countOfStatus["Not Called"] : 0 %></td>
-          <td><%= countOfStatus["Wrong Number"] ? countOfStatus["Wrong Number"] : 0 %></td>
-          <td><%= countOfStatus["Called/Declined"] ? countOfStatus["Called/Declined"] : 0 %></td>
-          <td><%= countOfStatus["Called/Not Reachable"] ? countOfStatus["Called/Not Reachable"] : 0 %></td>
-          <td><%= countOfStatus["Called/Postponed"] ? countOfStatus["Called/Postponed"] : 0 %></td>
-          <td><%= countOfStatus["Called/Accepted"] ? countOfStatus["Called/Accepted"] : 0 %></td>
-          <td><%= countOfStatus["Emailed/Awaiting Response"] ? countOfStatus["Emailed/Awaiting Response"] : 0 %></td>
-          <td><%= countOfStatus["Emailed/Declined"] ? countOfStatus["Emailed/Declined"] : 0 %></td>
-          <td><%= countOfStatus["Emailed/Confirmed"] ? countOfStatus["Emailed/Confirmed"] : 0 %></td>
-        </tr>
-      </tfoot>
-    </table>
-  <% } %> 
+  <% } else { %>
+  <p>
+    <b>Online/Offline Statistics not available becuase you (or your team members) have not created any contacts yet.</b>
+  </p>
+  <% } %> <% if(role !== "Member") { %>
+  <p><b>Member-Wise Statistics</b></p>
+  <table id="teams" class="table table-bordered">
+    <thead>
+      <tr>
+        <th style="width: 6%">SNO</th>
+        <th style="width: 12%">ED Incharge</th>
+        <th style="width: 19%">Member Name</th>
+        <th style="width: 8%">Not Called</th>
+        <th style="width: 8%">Wrong Number</th>
+        <th style="width: 8%">Called/Declined</th>
+        <th style="width: 8%">Called/Not Reachable</th>
+        <th style="width: 8%">Called/Postponed</th>
+        <th style="width: 8%">Called/Accepted</th>
+        <th style="width: 8%">Emailed/Awaiting Response</th>
+        <th style="width: 8%">Emailed/Declined</th>
+        <th style="width: 8%">Emailed/Confirmed</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% teams.forEach((team, index) => { %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <% if(role === "Admin") { %> <% if(index > 0) { %> <% if(teams[index].incharge !== teams[index - 1].incharge) {
+        %>
+        <td rowspan="<%= numOfMembers[team.incharge] %>" class="edIncharge"><%= team.incharge %></td>
+        <% } %> <% } else { %>
+        <td rowspan="<%= numOfMembers[team.incharge]  %> " class="edIncharge"><%= team.incharge %></td>
+        <% } %> <% } else if(role === "Executive Director" && index == 0) { %>
+        <td rowspan="<%= numOfMembers[name] %>"><%= name %></td>
+        <% } %>
+        <td><%= team.name %></td>
+        <td><%= team["statuses"]["Not Called"] ? team["statuses"]["Not Called"] : 0 %></td>
+        <td><%= team["statuses"]["Wrong Number"] ? team["statuses"]["Wrong Number"] : 0 %></td>
+        <td><%= team["statuses"]["Called/Declined"] ? team["statuses"]["Called/Declined"] : 0 %></td>
+        <td><%= team["statuses"]["Called/Not Reachable"] ? team["statuses"]["Called/Not Reachable"] : 0 %></td>
+        <td><%= team["statuses"]["Called/Postponed"] ? team["statuses"]["Called/Postponed"] : 0 %></td>
+        <td><%= team["statuses"]["Called/Accepted"] ? team["statuses"]["Called/Accepted"] : 0 %></td>
+        <td>
+          <%= team["statuses"]["Emailed/Awaiting Response"] ? team["statuses"]["Emailed/Awaiting Response"] : 0 %>
+        </td>
+        <td><%= team["statuses"]["Emailed/Declined"] ? team["statuses"]["Emailed/Declined"] : 0 %></td>
+        <td><%= team["statuses"]["Emailed/Confirmed"] ? team["statuses"]["Emailed/Confirmed"] : 0 %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3"></td>
+        <td><%= countOfStatus["Not Called"] ? countOfStatus["Not Called"] : 0 %></td>
+        <td><%= countOfStatus["Wrong Number"] ? countOfStatus["Wrong Number"] : 0 %></td>
+        <td><%= countOfStatus["Called/Declined"] ? countOfStatus["Called/Declined"] : 0 %></td>
+        <td><%= countOfStatus["Called/Not Reachable"] ? countOfStatus["Called/Not Reachable"] : 0 %></td>
+        <td><%= countOfStatus["Called/Postponed"] ? countOfStatus["Called/Postponed"] : 0 %></td>
+        <td><%= countOfStatus["Called/Accepted"] ? countOfStatus["Called/Accepted"] : 0 %></td>
+        <td><%= countOfStatus["Emailed/Awaiting Response"] ? countOfStatus["Emailed/Awaiting Response"] : 0 %></td>
+        <td><%= countOfStatus["Emailed/Declined"] ? countOfStatus["Emailed/Declined"] : 0 %></td>
+        <td><%= countOfStatus["Emailed/Confirmed"] ? countOfStatus["Emailed/Confirmed"] : 0 %></td>
+      </tr>
+    </tfoot>
+  </table>
+  <% } %>
 </div>
