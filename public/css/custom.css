@@ -114,11 +114,12 @@ i {
 }
 
 footer {
+  display: block;
   position: fixed;
   bottom: 0;
-  height: 45px;
-  line-height: 45px;
+  padding: 0.65rem 1rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
@@ -133,5 +134,11 @@ footer {
     display: block;
     float: left;
     clear: left;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    padding-bottom: 5rem;
   }
 }
