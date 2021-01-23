@@ -111,8 +111,9 @@ table#stats tbody tr td {
   vertical-align: middle;
 }
 
-tfoot {
+tfoot td:nth-child(n + 2) {
   font-weight: bold;
+  background-color: #f1f1f1;
 }
 
 .edIncharge {

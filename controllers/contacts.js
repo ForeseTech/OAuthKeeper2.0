@@ -348,7 +348,14 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
       },
     ]);
 
-    sumOfContacts = await Contact.countDocuments({});
+    sumOfContacts = await Contact.aggregate([
+      {
+        $group: {
+          _id: null,
+          count: { $sum: '$count' },
+        },
+      },
+    ]);
 
     for (let i = 0; i < noOfContacts.length; i++) {
       numOfContacts[noOfContacts[i]._id] = noOfContacts[i].count;

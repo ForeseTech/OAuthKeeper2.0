@@ -123,7 +123,7 @@
         <td><%= countOfStatus["Emailed/Awaiting Response"] ? countOfStatus["Emailed/Awaiting Response"] : 0 %></td>
         <td><%= countOfStatus["Emailed/Declined"] ? countOfStatus["Emailed/Declined"] : 0 %></td>
         <td><%= countOfStatus["Emailed/Confirmed"] ? countOfStatus["Emailed/Confirmed"] : 0 %></td>
-        <td><%= sumOfContacts %></td>
+        <td><%= sumOfContacts[0].count %></td>
       </tr>
     </tfoot>
     <% } %>
