@@ -63,9 +63,11 @@ const renderTable = asyncHandler(async (req, res, next) => {
 // @route      GET /contacts/statistics
 // @access     Private
 const renderStatistics = asyncHandler(async (req, res, next) => {
-  let noOfMembers, statusCount;
+  let noOfMembers, statusCount, noOfContacts;
   let numOfMembers = {},
-    countOfStatus = {};
+    countOfStatus = {},
+    numOfContacts = {},
+    sumOfContacts;
 
   if (req.user.role === 'Member') {
     modes = await Contact.aggregate([
@@ -298,7 +300,6 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
       },
       {
         $project: {
-          _id: 0,
           name: 1,
           incharge: 1,
           statuses: 1,
@@ -335,6 +336,23 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
     for (let i = 0; i < statusCount.length; i++) {
       countOfStatus[statusCount[i]._id] = statusCount[i].count;
     }
+
+    noOfContacts = await Contact.aggregate([
+      {
+        $group: {
+          _id: '$user',
+          count: {
+            $sum: '$count',
+          },
+        },
+      },
+    ]);
+
+    sumOfContacts = await Contact.countDocuments({});
+
+    for (let i = 0; i < noOfContacts.length; i++) {
+      numOfContacts[noOfContacts[i]._id] = noOfContacts[i].count;
+    }
   }
 
   res.render('contacts/statistics.ejs', {
@@ -342,6 +360,8 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
     statuses,
     numOfMembers,
     countOfStatus,
+    numOfContacts,
+    sumOfContacts,
     name: req.user.name,
     role: req.user.role,
   });

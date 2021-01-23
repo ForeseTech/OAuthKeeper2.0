@@ -68,6 +68,10 @@
         <th style="width: 8%">
           <div>Emailed/Confirmed</div>
         </th>
+
+        <th style="width: 8%">
+          <div>Total Contacts</div>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -101,6 +105,7 @@
         </td>
         <td><%= status["statuses"]["Emailed/Declined"] ? status["statuses"]["Emailed/Declined"] : 0 %></td>
         <td><%= status["statuses"]["Emailed/Confirmed"] ? status["statuses"]["Emailed/Confirmed"] : 0 %></td>
+        <td><%= numOfContacts[status._id] ? numOfContacts[status._id] : 0 %></td>
       </tr>
       <% }) %>
     </tbody>
@@ -118,6 +123,7 @@
         <td><%= countOfStatus["Emailed/Awaiting Response"] ? countOfStatus["Emailed/Awaiting Response"] : 0 %></td>
         <td><%= countOfStatus["Emailed/Declined"] ? countOfStatus["Emailed/Declined"] : 0 %></td>
         <td><%= countOfStatus["Emailed/Confirmed"] ? countOfStatus["Emailed/Confirmed"] : 0 %></td>
+        <td><%= sumOfContacts %></td>
       </tr>
     </tfoot>
     <% } %>
