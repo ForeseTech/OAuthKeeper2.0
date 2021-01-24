@@ -105,9 +105,13 @@
         </td>
         <td><%= status["statuses"]["Emailed/Declined"] ? status["statuses"]["Emailed/Declined"] : 0 %></td>
         <td><%= status["statuses"]["Emailed/Confirmed"] ? status["statuses"]["Emailed/Confirmed"] : 0 %></td>
-        <td><%= numOfContacts[status._id] ? numOfContacts[status._id] : 0 %></td>
+        <% if(role !== "Member") { %> 
+          <td><%= numOfContacts[status._id] ? numOfContacts[status._id] : 0 %></td>
+        <% } else { %> 
+          <td><%= sumOfContacts[0].count %></td>
+        <% } %> 
       </tr>
-      <% }) %>
+      <% }); %>
     </tbody>
 
     <% if(role !== "Member") { %>

@@ -139,6 +139,16 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
         $sort: { incharge: 1, name: 1 },
       },
     ]);
+
+    sumOfContacts = await Contact.aggregate([
+      { $match: { user: req.user._id } },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: '$count' },
+        },
+      },
+    ]);
   } else if (req.user.role === 'Executive Director') {
     // Get the ID's of the members whose ED incharge is the logged in user
     const members = await User.find({ incharge: req.user.name }, '_id');
@@ -266,8 +276,6 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
         },
       },
     ]);
-
-    console.log(numOfContacts);
   } else if (req.user.role == 'Admin') {
     modes = await Contact.aggregate([
       {
