@@ -134,6 +134,62 @@
   </table>
 
   <div class="row" id="card-stats">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"><b>Total Contacts : <%= sumOfContacts[0].count %></b></h5>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Not Called</b></td>
+                <td><%= countOfStatus["Not Called"] ? countOfStatus["Not Called"] : 0 %></td>
+                </tr>
+                <tr>
+                  <td><b>Wrong Number</b></td>
+                  <td><%= countOfStatus["Wrong Number"] ? countOfStatus["Wrong Number"] : 0 %></td>
+                </tr>
+                <tr>
+                  <td><b>Called/Declined</b></td>
+                  <td><%= countOfStatus["Called/Declined"] ? countOfStatus["Called/Declined"] : 0 %></td>
+                </tr>
+                <tr>
+                  <td><b>Called/Not Reachable</b></td>
+                  <td>
+                    <%= countOfStatus["Called/Not Reachable"] ? countOfStatus["Called/Not Reachable"] : 0 %>
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Called/Postponed</b></td>
+                  <td><%= countOfStatus["Called/Postponed"] ? countOfStatus["Called/Postponed"] : 0 %></td>
+                </tr>
+                <tr>
+                  <td><b>Called/Accepted</b></td>
+                  <td><%= countOfStatus["Called/Accepted"] ? countOfStatus["Called/Accepted"] : 0 %></td>
+                </tr>
+                <tr>
+                  <td><b>Emailed/Awaiting Response</b></td>
+                  <td><%= countOfStatus["Emailed/Awaiting Response"] ? countOfStatus["Emailed/Awaiting Response"] : 0 %></td>
+                </tr>
+                <tr>
+                  <td><b>Emailed/Declined</b></td>
+                  <td><%= countOfStatus["Emailed/Declined"] ? countOfStatus["Emailed/Declined"] : 0 %></td>
+                </tr>
+                <tr>
+                  <td><b>Emailed/Confirmed</b></td>
+                  <td><%= countOfStatus["Emailed/Confirmed"] ? countOfStatus["Emailed/Confirmed"] : 0 %></td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
     <% statuses.forEach((status, index) => { %>
     <div class="col">
       <div class="card">
@@ -189,6 +245,10 @@
               <tr>
                 <td><b>Emailed/Confirmed</b></td>
                 <td><%= status["statuses"]["Emailed/Confirmed"] ? status["statuses"]["Emailed/Confirmed"] : 0 %></td>
+              </tr>
+              <tr>
+                <td><b>Total Contacts</b></td>
+                <td><%= numOfContacts[status._id] ? numOfContacts[status._id] : 0 %></td>
               </tr>
             </tbody>
           </table>
