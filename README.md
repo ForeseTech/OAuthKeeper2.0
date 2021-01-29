@@ -8,9 +8,8 @@ A simple yet functional REST application to manage HR contacts for MOCK PLACEMEN
 - [Project Setup](#project-setup)
 - [Database Seeder](#database-seeder)
 - [Project Structure](#project-structure)
-- [Routes](#routes)
 - [Screenshots](#screenshots)
-- [Tools](#tools)
+- [Tools](#tools-and-technologies)
 - [Contributors](#contributors)
 - [Contributing](#contributing)
 - [LICENSE](#license)
@@ -103,29 +102,6 @@ OAuthKeeper2.0/
   README.MD              # Brief documentation
 ```
 
-## Routes
-| Route Name       | URL                              | HTTP Verb | Access  | Description                                         | 
-| ---------------- | -------------------------------- | --------- | ------  |---------------------------------------------------- | 
-| Landing Page     | /                                | GET       | Public  | Show links for logging in and registration          |
-| Register         | /users/register                  | GET       | Public  | Render form for user registration                   |
-| Register         | /users/register                  | POST      | Public  | Register user, then redirect to dashboard           |
-| Login            | /users/login                     | GET       | Public  | Render form for user login                          |
-| Login            | /users/login                     | POST      | Public  | Log User In, Then Redirect To Dashboard             |
-| Confirm E-Mail   | /users/confirmemail?token=token  | GET       | Public  | Verify token, Then Redirect To Dashboard            |
-| Forgot Password  | /users/forgotpassword            | GET       | Public  | Show form to accept user email                      |
-| Forgot Password  | /users/forgotpassword            | POST      | Public  | Send link to reset password to user e-mail          |
-| Update Password  | /users/updatepassword            | GET       | Private | Render form to update existing password             |
-| Update Password  | /users/updatepassword            | PUT       | Private | Update password, then redirect to dashboard         |
-| Reset Password   | /users/resetpassword/:resettoken | GET       | Private | Render form to reset password                       |
-| Reset Password   | /users/resetpassword/:resettoken | PUT       | Private | Update new password in the DB                       |
-| Logout           | /users/logout                    | GET       | Public  | Log User Out / Clear Cookie, Then Redirect to Login |
-| Dashboard        | /contacts                        | GET       | Private | Display user dashboard                              |
-| Tabulated View   | /contacts/panel                  | GET       | Private | Display contacts in tablated fashion                |
-| Statistics       | /contacts/statistics             | GET       | Private | Display contact statistics for each user            |
-| Create           | /contacts                        | POST      | Private | Create new contact, then redirect                   |
-| Update           | /contacts/:id                    | PUT       | Private | Update a contact, then redirect                     |
-| Destroy          | /contacts/:id                    | DELETE    | Private | Delete a contact, then redirect                     |
-
 ## Screenshots
 | Register Page                        | Login Page                           | Update Password Page                          | 
 | ------------------------------------ | ------------------------------------ | --------------------------------------------- | 
@@ -139,7 +115,7 @@ OAuthKeeper2.0/
 | ------------------------------------------ | ------------------------------------------- | ---------------------------------------- |
 | <img src="screenshots/create_contact.png"> | <img src="screenshots/update_contact.png"> | <img src="screenshots/delete_contact.png">
 
-## Tools
+## Tools And Technologies
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [NodeJS](https://nodejs.org/en/)
 * [NPM](https://www.npmjs.com/)
