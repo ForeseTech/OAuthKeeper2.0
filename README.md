@@ -9,7 +9,7 @@ A simple yet functional REST application to manage HR contacts for MOCK PLACEMEN
 - [Database Seeder](#database-seeder)
 - [Project Structure](#project-structure)
 - [Screenshots](#screenshots)
-- [Tools](#tools-and-technologies)
+- [Tools and Technologies](#tools-and-technologies)
 - [Contributors](#contributors)
 - [Contributing](#contributing)
 - [LICENSE](#license)
@@ -86,7 +86,7 @@ OAuthKeeper2.0/
   middleware/            # Middleware functions
   models/                # Database Schemas and Models
   public/                # Static CSS, JS files and Favicon
-  resources/             # Project Specifications and test data
+  resources/             # Project Specifications and seed data
   routes/                # User and Contact routes
   screenshots/           # Screenshots for documentation
   utils/                 # Log Files and other utilities
