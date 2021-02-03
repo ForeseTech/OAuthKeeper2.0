@@ -261,7 +261,7 @@ const sendTokenResponse = (user, req, res, flashMsg) => {
 
   req.flash('success', flashMsg);
 
-  const redirectUrl = req.session.returnTo || '/contacts';
+  const redirectUrl = req.session.returnTo || '/contacts/1';
   delete req.session.returnTo;
 
   res.cookie('token', token, options).redirect(redirectUrl);

@@ -46,10 +46,61 @@ const getContacts = async (req, res, view) => {
 };
 
 // @desc       Display contacts according to the role of the user
-// @route      GET /contacts
+// @route      GET /contacts/:page
 // @access     Private
 const renderDashboard = asyncHandler(async (req, res, next) => {
-  getContacts(req, res, 'contacts/dashboard.ejs');
+  let perPage = 100;
+  let page = req.params.page || 1;
+
+  // If user is member, show only their contacts
+  if (req.user.role === 'Member') {
+    contacts = await Contact.find({ user: req.user.id })
+      .skip(perPage * page - perPage)
+      .limit(perPage)
+      .populate({
+        path: 'user',
+        select: 'name incharge',
+      })
+      .sort('-createdAt');
+
+    count = await Contact.countDocuments({ user: req.user.id });
+  } else if (req.user.role === 'Executive Director') {
+    const members = await User.find({ incharge: req.user.name }, '_id');
+
+    contacts = await Contact.find()
+      .where('user')
+      .in(members)
+      .skip(perPage * page - perPage)
+      .limit(perPage)
+      .populate({
+        path: 'user',
+        select: 'name',
+      })
+      .sort('-createdAt');
+
+    count = await Contact.countDocuments().where('user').in(members);
+  }
+
+  // Show all contacts if user is an Admin
+  else if (req.user.role == 'Admin') {
+    contacts = await Contact.find({}) // Get all documents
+      .skip(perPage * page - perPage)
+      .limit(perPage)
+      .populate({
+        path: 'user',
+        select: 'name incharge',
+      })
+      .sort('-createdAt');
+
+    count = await Contact.countDocuments();
+  }
+  res.render('contacts/dashboard.ejs', {
+    contacts,
+    name: req.user.name,
+    role: req.user.role,
+    current: page,
+    pages: Math.ceil(count / perPage),
+  });
 });
 
 // @desc       Display contacts according to the role of the user

@@ -12,9 +12,10 @@ const { protect, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.route('/').get(protect, renderDashboard).post(protect, authorize('Member', 'Admin'), createContact);
+router.route('/').post(protect, authorize('Member', 'Admin'), createContact);
 router.route('/panel').get(protect, renderTable);
 router.route('/statistics').get(protect, renderStatistics);
+router.route('/:page').get(protect, renderDashboard);
 
 router
   .route('/:id')

@@ -9,7 +9,6 @@
   <div class="col-md-10 m-auto">
     <% if(!(role === "Executive Director")) { %> 
       <i class="fas fa-plus-circle fa-4x new-contact" data-toggle="modal" data-target="#newContact"></i>
-    </button>
     <% } %> 
   </div>
 
@@ -44,9 +43,7 @@
               aria-expanded="true"
             ></i>
           </p>
-
         </div>
-
         <div id="collapse<%= contact._id %>" class="collapse show" aria-labelledby="headingOne">
           <div class="card-body">
             <p><b>Phone Number : </b> <%= contact.phone %></p>
@@ -65,7 +62,6 @@
             <% if(contact.comments) { %> 
               <p><b>Comments : </b><%= contact.comments %></p>
             <% } %> 
-
             <% if(!(role === "Executive Director")) { %> 
             <div class="text-right">
               <button
@@ -105,6 +101,42 @@
       <% }); %>
     </div>
     <% } %>
+
+    <% if (pages > 0) { %>
+      <ul class="pagination">
+
+        <% if (current == 1) { %>
+            <li class="page-item disabled"><a class="page-link">First</a></li>
+        <% } else { %>
+            <li class="page-item"><a class="page-link" href="/contacts/1">First</a></li>
+        <% } %>
+
+        <% var i = (Number(current) > 3 ? Number(current) - 2 : 1) %>
+
+        <% if (i !== 1) { %>
+            <li class="page-item disabled"><a class="page-link">...</a></li>
+        <% } %>
+
+        <% for (; i <= (Number(current) + 2) && i <= pages; i++) { %>
+          <% if (i == current) { %>
+            <li class="page-item active"><a class="page-link"><%= i %></a></li>
+          <% } else { %>
+            <li class="page-item"><a class="page-link" href="/contacts/<%= i %>"><%= i %></a></li>
+          <% } %>
+          <% if (i == Number(current) + 2 && i < pages) { %>
+            <li class="page-item disabled"><a class="page-link">...</a></li>
+          <% } %>
+        <% } %>
+
+        <% if (current == pages) { %>
+          <li class="page-item disabled"><a class="page-link">Last</a></li>
+        <% } else { %>
+          <li class="page-item"><a class="page-link" href="/contacts/<%= pages %>">Last</a></li>
+        <% } %>
+
+      </ul>
+    <% } %>
+
   </div>
 </div>
 
