@@ -37,7 +37,7 @@ const authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       req.flash('error', `User role ${req.user.role} is not authorized to perform this operation`);
-      return res.redirect('/contacts');
+      return res.redirect('/contacts/1');
     }
     next();
   };
