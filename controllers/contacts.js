@@ -466,7 +466,7 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
 const createContact = asyncHandler(async (req, res, next) => {
   // Add user ID to request body
   req.body.user = req.user.id;
-  req.body.phone = req.body.phone.trim();
+  req.body.phone = req.body.phone.replace(/ /g, '');
 
   Contact.findOne({ phone: req.body.phone }).then((contact) => {
     if (contact) {
