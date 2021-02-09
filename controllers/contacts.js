@@ -466,11 +466,12 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
 const createContact = asyncHandler(async (req, res, next) => {
   // Add user ID to request body
   req.body.user = req.user.id;
+  req.body.phone = req.body.phone.trim();
 
   Contact.findOne({ phone: req.body.phone }).then((contact) => {
     if (contact) {
       req.flash('error', 'Cannot create contact as this phone number already exists in the DB.');
-      return res.redirect('/contacts');
+      return res.redirect('/contacts/1');
     }
   });
 
@@ -485,7 +486,7 @@ const createContact = asyncHandler(async (req, res, next) => {
   const contact = await Contact.create(req.body);
 
   req.flash('success', 'New Contact Successfully Added');
-  res.redirect('/contacts');
+  res.redirect('/contacts/1');
 });
 
 // @desc       Update a contact, then redirect
@@ -514,7 +515,7 @@ const updateContact = asyncHandler(async (req, res, next) => {
   contact = await Contact.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
 
   req.flash('success', 'Contact Successfully Updated');
-  res.redirect('/contacts');
+  res.redirect('/contacts/1');
 });
 
 // @desc       Delete a contact, then redirect
@@ -535,7 +536,7 @@ const deleteContact = asyncHandler(async (req, res, next) => {
   contact.remove();
 
   req.flash('success', 'Contact Successfully Deleted');
-  res.redirect('/contacts');
+  res.redirect('/contacts/1');
 });
 
 module.exports = {
