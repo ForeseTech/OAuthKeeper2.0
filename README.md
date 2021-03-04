@@ -96,7 +96,7 @@ OAuthKeeper2.0/
   app.js                 # Express configuration
   server.js              # Application entry point
   seeder.js              # Seed file to populate and destroy data
-  package.json           # Project Description and dependeincies
+  package.json           # Project Description and dependencies
   package-lock.json      # Lock File
   LICENSE                # MIT License file
   README.MD              # Brief documentation
