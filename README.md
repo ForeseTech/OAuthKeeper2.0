@@ -50,20 +50,28 @@ There was a need for a solution which would help us get solve all of these probl
 
 ## Project Setup
 
-Rename the .env.example file to .env and replace it with your credentials.
-
-To get a SendGrid API key, signup for a SendGrid account [here](https://sendgrid.com/).
-
 ```
-Install dependencies
+Clone the repository to your local system
+git clone https://github.com/ForeseTech/OAuthKeeper2.0
+
+Navigate to the cloned repo
+cd OAuthKeeper2.0
+
+Create a copy of the .env.example file and name it .env
+cp .env.example .env
+
+Replace the placeholder credentials in the .env file with your credentials
+
+Install project dependencies
 npm install
 
-Run in development mode
+Start server in development mode
 npm run dev
 
-Run in production mode
+Start server in production
 npm start
 ```
+PS : To get a SendGrid API key, signup for a SendGrid account [here](https://sendgrid.com/).
 
 ## Database Seeder 
 
@@ -96,7 +104,7 @@ OAuthKeeper2.0/
   app.js                 # Express configuration
   server.js              # Application entry point
   seeder.js              # Seed file to populate and destroy data
-  package.json           # Project Description and dependeincies
+  package.json           # Project Description and dependencies
   package-lock.json      # Lock File
   LICENSE                # MIT License file
   README.MD              # Brief documentation
