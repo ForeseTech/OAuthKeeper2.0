@@ -7,7 +7,6 @@
 ![image](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
 ![image](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E)
 ![image](https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white)
-![image](https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
 
 A simple yet functional __REST application__ to manage HR contacts for __MOCK PLACEMENTS (2021)__. It lets only authorized users to view certain contacts. 
 
@@ -86,7 +85,7 @@ Start server in production
 npm start
 ```
 
-PS : To get a SendGrid API key, signup for a SendGrid account [here](https://sendgrid.com/).
+__PS :__ To get a SendGrid API key, signup for a SendGrid account [here](https://sendgrid.com/).
 
 ## Database Seeder
 
