@@ -397,7 +397,13 @@ const renderStatistics = asyncHandler(async (req, res, next) => {
     ]);
 
     noOfMembers = await User.aggregate([
-      { $match: { incharge: { $in: ['Adhihariharan', 'Anuja', 'Dhivya', 'Govind', 'Joann'] } } },
+      {
+        $match: {
+          incharge: {
+            $in: ['Adhihariharan', 'Anuja', 'Dhivya', 'Govind', 'Joann'],
+          },
+        },
+      },
       {
         $group: {
           _id: '$incharge',
@@ -470,7 +476,10 @@ const createContact = asyncHandler(async (req, res, next) => {
 
   Contact.findOne({ phone: req.body.phone }).then((contact) => {
     if (contact) {
-      req.flash('error', 'Cannot create contact as this phone number already exists in the DB.');
+      req.flash(
+        'error',
+        'Cannot create contact as this phone number already exists in the DB.'
+      );
       return res.redirect('/contacts/1');
     }
   });
@@ -496,12 +505,22 @@ const updateContact = asyncHandler(async (req, res, next) => {
   let contact = await Contact.findById(req.params.id);
 
   if (!contact) {
-    return next(new ErrorResponse(`Contact with the ID of ${req.params.id} does not exist.`, 404));
+    return next(
+      new ErrorResponse(
+        `Contact with the ID of ${req.params.id} does not exist.`,
+        404
+      )
+    );
   }
 
   // Update contact only if contact belongs to the logged in user or if user is admin
   if (contact.user.toString() !== req.user.id && req.user.role !== 'Admin') {
-    return next(new ErrorResponse(`User ${req.user.name} is not authorized to access this contact`, 401));
+    return next(
+      new ErrorResponse(
+        `User ${req.user.name} is not authorized to access this contact`,
+        401
+      )
+    );
   }
 
   // Set address to empty string if contact wishes to use own transport
@@ -512,7 +531,10 @@ const updateContact = asyncHandler(async (req, res, next) => {
     req.body.ownTransport = false;
   }
 
-  contact = await Contact.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
+  contact = await Contact.findOneAndUpdate({ _id: req.params.id }, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
   req.flash('success', 'Contact Successfully Updated');
   res.redirect('/contacts/1');
@@ -525,12 +547,22 @@ const deleteContact = asyncHandler(async (req, res, next) => {
   const contact = await Contact.findById(req.params.id);
 
   if (!contact) {
-    return next(new ErrorResponse(`Contact with the ID of ${req.params.id} does not exist.`, 404));
+    return next(
+      new ErrorResponse(
+        `Contact with the ID of ${req.params.id} does not exist.`,
+        404
+      )
+    );
   }
 
   // Delete contact only if contact belongs to the logged in user or if user is admin
   if (contact.user.toString() !== req.user.id && req.user.role !== 'Admin') {
-    return next(new ErrorResponse(`User ${req.user.id} is not authorized to access this contact`, 401));
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to access this contact`,
+        401
+      )
+    );
   }
 
   contact.remove();

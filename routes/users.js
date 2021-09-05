@@ -24,11 +24,20 @@ router.route('/login').get(renderLogin).post(loginUser);
 
 router.route('/confirmemail').get(confirmEmail);
 
-router.route('/forgotpassword').get(renderForgotPasswordForm).post(forgotPassword);
+router
+  .route('/forgotpassword')
+  .get(renderForgotPasswordForm)
+  .post(forgotPassword);
 
-router.route('/updatepassword').get(protect, renderUpdatePasswordForm).put(protect, updatePassword);
+router
+  .route('/updatepassword')
+  .get(protect, renderUpdatePasswordForm)
+  .put(protect, updatePassword);
 
-router.route('/resetpassword/:resettoken').get(renderResetPasswordForm).put(resetPassword);
+router
+  .route('/resetpassword/:resettoken')
+  .get(renderResetPasswordForm)
+  .put(resetPassword);
 
 router.route('/logout').get(logout);
 

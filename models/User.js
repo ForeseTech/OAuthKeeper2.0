@@ -16,7 +16,10 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: [true, 'Please add an email'],
     unique: [true, 'This email ID already exists'],
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email'],
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      'Please add a valid email',
+    ],
     trim: true,
   },
 
@@ -90,7 +93,10 @@ UserSchema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString('hex');
 
   // Hash token and set to resetPasswordToken field
-  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
 
   // Set expiry date
   this.resetPasswordExpiration = Date.now() + 10 * 60 * 1000;
@@ -104,7 +110,10 @@ UserSchema.methods.generateEmailConfirmToken = function () {
   const confirmationToken = crypto.randomBytes(20).toString('hex');
 
   // Hash token and set to confirmEmail token
-  this.confirmEmailToken = crypto.createHash('sha256').update(confirmationToken).digest('hex');
+  this.confirmEmailToken = crypto
+    .createHash('sha256')
+    .update(confirmationToken)
+    .digest('hex');
 
   const confirmTokenExtend = crypto.randomBytes(100).toString('hex');
   const confirmTokenCombined = `${confirmationToken}.${confirmTokenExtend}`;

@@ -16,8 +16,12 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 // Read JSON files
-const users = JSON.parse(fs.readFileSync(`${__dirname}/resources/_data/users.json`, 'utf-8'));
-const contacts = JSON.parse(fs.readFileSync(`${__dirname}/resources/_data/contacts.json`, 'utf-8'));
+const users = JSON.parse(
+  fs.readFileSync(`${__dirname}/resources/_data/users.json`, 'utf-8')
+);
+const contacts = JSON.parse(
+  fs.readFileSync(`${__dirname}/resources/_data/contacts.json`, 'utf-8')
+);
 
 // Import into DB
 const importData = async () => {

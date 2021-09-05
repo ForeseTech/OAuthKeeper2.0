@@ -6,7 +6,8 @@ searchBox.addEventListener('keyup', function () {
   const searchInput = searchBox.value.toUpperCase();
 
   for (let i = 0; i < cards.length; i++) {
-    const contactHeader = cards[i].getElementsByClassName('contact-header')[0].innerText;
+    const contactHeader =
+      cards[i].getElementsByClassName('contact-header')[0].innerText;
     if (contactHeader.toUpperCase().indexOf(searchInput) < 0) {
       cards[i].style.display = 'none';
     } else {
@@ -35,7 +36,13 @@ for (let i = 0; i < contactStatus.length; i++) {
 }
 
 const contactIncharge = document.getElementsByClassName('contactIncharge');
-const edColors = { Adhihariharan: '#2191FB', Anuja: '#994636', Dhivya: '#005b96', Govind: '#FFAD05', Joann: '#CE6D8B' };
+const edColors = {
+  Adhihariharan: '#2191FB',
+  Anuja: '#994636',
+  Dhivya: '#005b96',
+  Govind: '#FFAD05',
+  Joann: '#CE6D8B',
+};
 
 for (let i = 0; i < contactIncharge.length; i++) {
   const edName = contactIncharge[i].innerText.split(' /')[0];
@@ -84,7 +91,9 @@ for (let i = 0; i < editBtns.length; i++) {
     editForm['count'].value = parseInt(this.getAttribute('data-count')) ?? '';
     editForm['comments'].value = this.getAttribute('data-comments') ?? '';
 
-    const deptPreferences = this.getAttribute('data-deptPreferences').split(',');
+    const deptPreferences = this.getAttribute('data-deptPreferences').split(
+      ','
+    );
     const deptPreference = editForm['deptPreference'];
 
     for (let i = 0; i < deptPreference.length; i++) {

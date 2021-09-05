@@ -3,70 +3,117 @@
 <p class="mb-0 mt-3"><b>Toggle Columns</b></p>
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="name" checked />
+    <input
+      name="column"
+      type="checkbox"
+      class="form-check-input"
+      value="name"
+      checked
+    />
     Name
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="company" checked />
+    <input
+      name="column"
+      type="checkbox"
+      class="form-check-input"
+      value="company"
+      checked
+    />
     Company
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="count" checked />
+    <input
+      name="column"
+      type="checkbox"
+      class="form-check-input"
+      value="count"
+      checked
+    />
     No of HR's
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="status" checked />
+    <input
+      name="column"
+      type="checkbox"
+      class="form-check-input"
+      value="status"
+      checked
+    />
     Status
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="mode" checked />
+    <input
+      name="column"
+      type="checkbox"
+      class="form-check-input"
+      value="mode"
+      checked
+    />
     Interview Mode
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="member" <% if(!(role === "Member")) { %>
-    checked <% } %> /> 2<sup>nd</sup> Year Member
+    <input name="column" type="checkbox" class="form-check-input" value="member"
+    <% if(!(role === "Member")) { %> checked <% } %> /> 2<sup>nd</sup> Year
+    Member
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="incharge" <% if(role === "Admin") { %> checked
-    <% } %> /> ED Incharge
+    <input name="column" type="checkbox" class="form-check-input"
+    value="incharge" <% if(role === "Admin") { %> checked <% } %> /> ED Incharge
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="preference" checked />
+    <input
+      name="column"
+      type="checkbox"
+      class="form-check-input"
+      value="preference"
+      checked
+    />
     Dept. Preference
   </label>
 </div>
 
 <div class="form-check form-check-inline">
   <label class="form-check-label">
-    <input name="column" type="checkbox" class="form-check-input" value="comments" checked />
+    <input
+      name="column"
+      type="checkbox"
+      class="form-check-input"
+      value="comments"
+      checked
+    />
     Requirements
   </label>
 </div>
 
 <div>
-  <button id="download-xlsx" class="btn btn-primary mb-2">Download As Excel File</button>
-  <button id="download-pdf" class="btn btn-secondary mb-2">Download As PDF</button>
+  <button id="download-xlsx" class="btn btn-primary mb-2">
+    Download As Excel File
+  </button>
+  <button id="download-pdf" class="btn btn-secondary mb-2">
+    Download As PDF
+  </button>
 </div>
 
 <table id="table">
@@ -80,7 +127,7 @@
       <th>2nd Year Member</th>
       <th>ED Incharge</th>
       <th>Department Preference</th>
-      <th>Requirements</th>
+      <th>Phone</th>
     </tr>
   </thead>
   <tbody>
@@ -94,7 +141,7 @@
       <td><%= contact.user.name %></td>
       <td><%= contact.user.incharge %></td>
       <td><%= contact.deptPreference %></td>
-      <td><%= contact.comments %></td>
+      <td><%= contact.phone %></td>
     </tr>
     <% }); %>
   </tbody>
@@ -306,15 +353,19 @@
   });
 
   // Trigger download of data.xlsx file
-  document.getElementById('download-xlsx').addEventListener('click', function () {
-    table.download('xlsx', 'data.xlsx', { sheetName: 'My Data' });
-  });
+  document
+    .getElementById('download-xlsx')
+    .addEventListener('click', function () {
+      table.download('xlsx', 'data.xlsx', { sheetName: 'My Data' });
+    });
 
   // Trigger download of data.pdf file
-  document.getElementById('download-pdf').addEventListener('click', function () {
-    table.download('pdf', 'data.pdf', {
-      orientation: 'portrait', //set page orientation to portrait
-      title: 'HR Contacts', //add title to report
+  document
+    .getElementById('download-pdf')
+    .addEventListener('click', function () {
+      table.download('pdf', 'data.pdf', {
+        orientation: 'portrait', //set page orientation to portrait
+        title: 'HR Contacts', //add title to report
+      });
     });
-  });
 </script>

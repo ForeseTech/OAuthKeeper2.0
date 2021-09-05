@@ -15,7 +15,9 @@ class Database {
         useFindAndModify: false,
       })
       .then((conn) => {
-        console.log(`MongoDB Connected : ${conn.connection.host}`.cyan.underline);
+        console.log(
+          `MongoDB Connected : ${conn.connection.host}`.cyan.underline
+        );
       })
       .catch((err) => {
         console.log('Database connection error : ' + err);

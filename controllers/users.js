@@ -28,7 +28,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
   const confirmEmailToken = user.generateEmailConfirmToken();
 
   // Create Reset URL
-  const confirmEmailURL = `${req.protocol}://${req.get('host')}/users/confirmemail?token=${confirmEmailToken}`;
+  const confirmEmailURL = `${req.protocol}://${req.get(
+    'host'
+  )}/users/confirmemail?token=${confirmEmailToken}`;
 
   const message = `You are receiving this email because you need to confirm your email address. Click <a href="${confirmEmailURL}">here</a> to confirm your e-mail.`;
 
@@ -101,7 +103,10 @@ const confirmEmail = asyncHandler(async (req, res, next) => {
   }
 
   const splitToken = token.split('.')[0];
-  const confirmEmailToken = crypto.createHash('sha256').update(splitToken).digest('hex');
+  const confirmEmailToken = crypto
+    .createHash('sha256')
+    .update(splitToken)
+    .digest('hex');
 
   // Get user by token
   const user = await User.findOne({
@@ -120,7 +125,12 @@ const confirmEmail = asyncHandler(async (req, res, next) => {
   user.save({ validateBeforeSave: false });
 
   // Send token response
-  sendTokenResponse(user, req, res, 'Your E-Mail ID was successfully verified.');
+  sendTokenResponse(
+    user,
+    req,
+    res,
+    'Your E-Mail ID was successfully verified.'
+  );
 });
 
 // @desc       Render Form To Accept E-Mail From User Who Has Forgotten Password
@@ -147,7 +157,9 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // Reset URL
-  const resetURL = `${req.protocol}://${req.get('host')}/users/resetpassword/${resetToken}`;
+  const resetURL = `${req.protocol}://${req.get(
+    'host'
+  )}/users/resetpassword/${resetToken}`;
 
   const message = `You are receiving this message because you (or someone else) has requested the reset of your password. Please click <a href=${resetURL}>here</a> to reset your password.`;
 
@@ -158,7 +170,10 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
       message,
     });
 
-    req.flash('success', 'A password reset link has been sent to your E-Mail ID.');
+    req.flash(
+      'success',
+      'A password reset link has been sent to your E-Mail ID.'
+    );
     res.redirect('/users/forgotpassword');
   } catch (err) {
     user.resetPasswordToken = undefined;
@@ -166,7 +181,10 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
 
     await user.save({ validateBeforeSave: false });
 
-    req.flash('error', 'Email could not be sent. Please contact administrator.');
+    req.flash(
+      'error',
+      'Email could not be sent. Please contact administrator.'
+    );
     return res.redirect('/users/forgotpassword');
   }
 });
@@ -211,9 +229,15 @@ const renderResetPasswordForm = (req, res, next) => {
 // @access     Public
 const resetPassword = asyncHandler(async (req, res, next) => {
   // Get hashed token
-  const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(req.params.resettoken)
+    .digest('hex');
 
-  const user = await User.findOne({ resetPasswordToken, resetPasswordExpiration: { $gt: Date.now() } });
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpiration: { $gt: Date.now() },
+  });
 
   if (!user) {
     req.flash('error', 'Invalid Token');
@@ -255,7 +279,9 @@ const sendTokenResponse = (user, req, res, flashMsg) => {
   const token = user.getSignedJwtToken();
 
   const options = {
-    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+    ),
     httpOnly: true,
   };
 
